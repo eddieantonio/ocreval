@@ -1,0 +1,29 @@
+.TH NGRAM 1
+.SH NAME
+ngram \- computes 
+.IR n -grams
+.SH SYNOPSIS
+.B ngram
+[
+.B \-n
+1 | 2 | 3
+] textfile1 textfile2 ... >resultfile
+.SH DESCRIPTION
+.I Ngram
+reads one or more text files and writes to stdout the
+.IR n -gram
+statistics for the text found in these files.  The `\-n' option specifies the
+value of
+.IR n :
+1 for uni-grams, 2 for bi-grams, or 3 for tri-grams, where the default is 1
+(uni-grams).  The output shows the number of occurrences of each distinct
+.IR n -character
+sequence and indicates the number of those occurrences that are suspect
+(i.e., have at least one character marked as suspect).
+.SH OPTIONS
+.TP
+.B \-n
+Specify the value of
+.IR n .
+.SH "SEE ALSO"
+.IR wordfreq (1).

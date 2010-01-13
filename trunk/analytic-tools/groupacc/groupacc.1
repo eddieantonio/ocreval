@@ -1,0 +1,23 @@
+.TH GROUPACC 1
+.SH NAME
+groupacc \- shows the accuracy for characters belonging to a group
+.SH SYNOPSIS
+.B groupacc
+groupfile accuracy_report [ groupacc_report ]
+.SH DESCRIPTION
+.I Groupacc
+extracts the accuracy results from
+.I accuracy_report
+for each character found in
+.IR groupfile .
+The results are written to
+.I groupacc_report
+if specified; otherwise, they are written to stdout.
+The input character accuracy report must have been produced by either
+.I accuracy
+or
+.IR accsum .
+.SH "SEE ALSO"
+.IR accsum (1)
+and
+.IR accuracy (1).

@@ -1,0 +1,19 @@
+.TH EDITOPSUM 1
+.SH NAME
+editopsum \- combines edit operation reports
+.SH SYNOPSIS
+.B editopsum
+editop_report1 editop_report2 ... >editop_report
+.SH DESCRIPTION
+.I Editopsum
+combines two or more edit operation reports and writes an aggregate report
+to stdout.  The input reports must have been produced by either
+.I editop
+or
+.IR editopsum .
+.SH "SEE ALSO"
+.IR accsum (1),
+.IR editop (1),
+.IR editopcost (1)
+and
+.IR wordaccsum (1).

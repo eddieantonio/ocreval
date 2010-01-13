@@ -1,0 +1,31 @@
+.TH WORDACC 1
+.SH NAME
+wordacc \- computes word accuracy
+.SH SYNOPSIS
+.B wordacc
+[
+.B \-S
+stopwordfile ] correctfile generatedfile [ wordacc_report ]
+.SH DESCRIPTION
+.I Wordacc
+computes the word accuracy of the OCR-generated text in
+.I generatedfile
+using the correct text found in
+.IR correctfile .
+A report containing accuracy statistics is written to
+.I wordacc_report
+if specified; otherwise, it is written to stdout.  Stopwords are taken from
+.I stopwordfile
+if specified; otherwise, the BASISplus default set of 110 stopwords is
+utilized.
+.SH OPTIONS
+.TP
+.B \-S
+Specify the name of a file containing stopwords.
+.SH "SEE ALSO"
+.IR accuracy (1),
+.IR editop (1),
+.IR nonstopacc (1),
+.IR wordaccci (1)
+and
+.IR wordaccsum (1).

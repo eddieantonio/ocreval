@@ -1,0 +1,28 @@
+.TH EDITOPCOST 1
+.SH NAME
+editopcost \- computes the cost of edit operations
+.SH SYNOPSIS
+.B editopcost
+editop_report [ editop_report2 ] >xyfile
+.SH DESCRIPTION
+.I Editopcost
+computes the cost of the edit operations described in
+.IR editop_report ,
+less the cost of the edit operations described in
+.IR editop_report2 ,
+if specified.
+The cost is based on the number of insertions, the number and lengths of move
+operations, and a threshold value,
+.IR T ,
+used to convert move operations into an equivalent number of insertions.
+The cost is computed and written to stdout for
+.I T
+= 0 to 100.
+The input reports must have been produced by either
+.I editop
+or
+.IR editopsum .
+.SH "SEE ALSO"
+.IR editop (1)
+and
+.IR editopsum (1).

@@ -1,0 +1,20 @@
+.TH WORDACCCI 1
+.SH NAME
+wordaccci \- computes a confidence interval for word accuracy
+.SH SYNOPSIS
+.B wordaccci
+wordacc_report1 wordacc_report2 ... >resultfile
+.SH DESCRIPTION
+.I Wordaccci
+reads two or more word accuracy reports and writes to stdout an
+approximate 95% confidence interval for word accuracy.  Each input report
+is treated as one observation, and normally has been produced for a single page
+using
+.IR wordacc .
+The confidence interval is computed using a technique known as jackknife
+estimation which assumes that the observations are independent.  For best
+results, at least 30 observations are needed.
+.SH "SEE ALSO"
+.IR accci (1)
+and
+.IR wordacc (1).

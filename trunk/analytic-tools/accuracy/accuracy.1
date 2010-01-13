@@ -1,0 +1,22 @@
+.TH ACCURACY 1
+.SH NAME
+accuracy \- computes character accuracy
+.SH SYNOPSIS
+.B accuracy
+correctfile generatedfile [ accuracy_report ]
+.SH DESCRIPTION
+.I Accuracy
+computes the character accuracy of the OCR-generated text in
+.I generatedfile
+using the correct text found in
+.IR correctfile .
+A report containing accuracy statistics is written to
+.I accuracy_report
+if specified; otherwise, it is written to stdout.
+.SH "SEE ALSO"
+.IR accci (1),
+.IR accsum (1),
+.IR editop (1),
+.IR synctext (1)
+and
+.IR wordacc (1).

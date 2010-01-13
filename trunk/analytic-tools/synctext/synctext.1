@@ -1,0 +1,44 @@
+.TH SYNCTEXT 1
+.SH NAME
+synctext \- synchronizes text files
+.SH SYNOPSIS
+.B synctext
+[
+.B \-H
+] [
+.B \-i
+] [
+.B \-s
+] [
+.B \-T
+] textfile1 textfile2 ... >resultfile
+.SH DESCRIPTION
+.I Synctext
+synchronizes two or more text files and writes to stdout the differences
+among these files.  The output shows the substrings that are common to all of
+the files followed by footnotes indicating what the differences are.
+.PP
+If more than two input files are specified, then a heuristic (sub-optimal)
+algorithm is used to find matches.  If only two input files are specified, then
+an optimal algorithm is used, unless the `\-H' or `\-T' option is specified.
+If the `\-H' option is specified, then the heuristic algorithm is applied to
+the two input files.  If the `\-T' option is specified, then a heuristic
+algorithm that can find transposed matches is utilized, and the output takes a
+different form: each match is numbered and appears within braces.
+.SH OPTIONS
+.TP
+.B \-H
+Use heuristic algorithm.
+.TP
+.B \-i
+Ignore case (i.e., case-insensitive).
+.TP
+.B \-s
+Show suspect markers.
+.TP
+.B \-T
+Find transposed matches.
+.SH "SEE ALSO"
+.IR accuracy (1)
+and
+.IR editop (1).

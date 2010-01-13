@@ -1,0 +1,1 @@
+cc -I../Modules -O -o editop editop.c ../Modules/Lib.a
