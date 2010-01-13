@@ -1,0 +1,38 @@
+The ISRI Analytic Tools for OCR Evalutaion
+
+Copyright 1996 The Board of Regents of the Nevada System of Higher
+Education, on behalf, of the University of Nevada, Las Vegas,
+Information Science Research Institute
+
+Licensed under the Apache License, Version 2.0 (the "License"); you
+may not use this file except in compliance with the License.  You may
+obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+implied. See the License for the specific language governing
+permissions and limitations under the License.
+
+Introduction
+============
+
+The ISRI Analytic Tools consist of 19 tools for meansuring the
+performance of and experimenting with OCR output.  See the user guide
+(user-guide.pdf) for more information.
+
+
+Building
+========
+
+Each subdirectory contains the source for one program, a Unix man
+page, and a build script named "Build".  Most programs depend on
+a library that is build by Modules/Build.  To build the library
+and all of the programs, cd into each directory and run ./Build.
+
+A more featureful and flexible build procedure will hopefully come in
+the future.
+
+

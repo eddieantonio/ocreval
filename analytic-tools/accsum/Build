@@ -1,0 +1,1 @@
+cc -I../Modules -O -o accsum accsum.c ../Modules/Lib.a

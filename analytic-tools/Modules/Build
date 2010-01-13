@@ -1,0 +1,5 @@
+cc -c -O *.c
+rm Lib.a
+ar r Lib.a *.o
+ranlib Lib.a
+rm *.o

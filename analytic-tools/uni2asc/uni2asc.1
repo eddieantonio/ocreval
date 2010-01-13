@@ -1,0 +1,13 @@
+.TH UNI2ASC 1
+.SH NAME
+uni2asc \- converts Unicode to ASCII
+.SH SYNOPSIS
+.B uni2asc
+<Unicode_file >ASCII_file
+.SH DESCRIPTION
+.I Uni2asc
+reads a Unicode file from stdin, and writes an equivalent ASCII file to
+stdout.  When necessary, a hex code of the form <FF> or <FFFF> is used to
+represent a Unicode value.
+.SH "SEE ALSO"
+.IR asc2uni (1).

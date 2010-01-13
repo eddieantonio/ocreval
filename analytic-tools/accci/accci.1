@@ -1,0 +1,20 @@
+.TH ACCCI 1
+.SH NAME
+accci \- computes a confidence interval for character accuracy
+.SH SYNOPSIS
+.B accci
+accuracy_report1 accuracy_report2 ... >resultfile
+.SH DESCRIPTION
+.I Accci
+reads two or more character accuracy reports and writes to stdout an
+approximate 95% confidence interval for character accuracy.  Each input report
+is treated as one observation, and normally has been produced for a single page
+using
+.IR accuracy .
+The confidence interval is computed using a technique known as jackknife
+estimation which assumes that the observations are independent.  For best
+results, at least 30 observations are needed.
+.SH "SEE ALSO"
+.IR accuracy (1)
+and
+.IR wordaccci (1).

@@ -1,0 +1,1 @@
+cc -I../Modules -O -o accdist accdist.c ../Modules/Lib.a

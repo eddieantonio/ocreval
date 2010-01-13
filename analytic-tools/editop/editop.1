@@ -1,0 +1,23 @@
+.TH EDITOP 1
+.SH NAME
+editop \- counts edit operations
+.SH SYNOPSIS
+.B editop
+correctfile generatedfile [ editop_report ]
+.SH DESCRIPTION
+.I Editop
+counts the edit operations (character insertions, character deletions, and
+block move operations) required to transform the OCR-generated text in
+.I generatedfile
+to the correct text found in
+.IR correctfile .
+A report containing edit operation statistics is written to
+.I editop_report
+if specified; otherwise, it is written to stdout.
+.SH "SEE ALSO"
+.IR accuracy (1),
+.IR editopcost (1),
+.IR editopsum (1),
+.IR synctext (1)
+and
+.IR wordacc (1).

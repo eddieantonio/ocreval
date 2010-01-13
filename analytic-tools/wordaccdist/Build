@@ -1,0 +1,1 @@
+cc -I../Modules -O -o wordaccdist wordaccdist.c ../Modules/Lib.a

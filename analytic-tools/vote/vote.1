@@ -1,0 +1,49 @@
+.TH VOTE 1
+.SH NAME
+vote \- applies voting to text files
+.SH SYNOPSIS
+.B vote
+[
+.B \-O
+] [
+.B \-o
+outputfile ] [
+.B \-s
+m/n ] [
+.B \-w
+m/n ] textfile1 textfile2 ...
+.SH DESCRIPTION
+.I Vote
+applies a voting algorithm to two or more text files.  The resulting text is
+written to
+.I outputfile
+if specified; otherwise, it is written to stdout.
+.PP
+An unmarked character in the input receives one vote.
+A reject character receives no votes.
+If a fraction is specified by the `\-w' option, then a character marked as
+suspect receives this fraction of a vote; otherwise, it receives a full vote.
+If a fraction is specified by the `\-s' option, and an output character
+receives no more than this fraction of the possible number of votes, then it is
+marked as suspect; otherwise, it is unmarked.  For both of these options,
+.I m
+and
+.I n
+must satisfy 1 <=
+.I m
+<=
+.I n
+<= 9.
+.SH OPTIONS
+.TP
+.B \-O
+Enable optimization.
+.TP
+.B \-o
+Specify the name of the output file.
+.TP
+.B \-s
+Specify the threshold for marking output characters.
+.TP
+.B \-w
+Specify the weight of marked input characters.

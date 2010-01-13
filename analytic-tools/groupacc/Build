@@ -1,0 +1,1 @@
+cc -I../Modules -O -o groupacc groupacc.c ../Modules/Lib.a

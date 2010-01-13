@@ -1,0 +1,24 @@
+.TH NONSTOPACC 1
+.SH NAME
+nonstopacc \- computes non-stopword accuracy
+.SH SYNOPSIS
+.B nonstopacc
+stopwordfile wordacc_report >xyfile
+.SH DESCRIPTION
+.I Nonstopacc
+computes non-stopword accuracy as a function of the number of stopwords.
+Stopwords are specified in
+.I stopwordfile
+in decreasing order of frequency.  Word accuracy data is supplied by
+.IR wordacc_report ,
+which must have been produced by either
+.I wordacc
+or
+.IR wordaccsum .
+Non-stopword accuracy is computed and written to stdout using no stopwords,
+one stopword, two stopwords, ..., and all stopwords from
+.IR stopwordfile .
+.SH "SEE ALSO"
+.IR wordacc (1)
+and
+.IR wordaccsum (1).
