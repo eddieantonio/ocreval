@@ -123,8 +123,6 @@ void initialize(/* int *argc, char *argv[], char *usage, Option option[] */);
 
 void terminate();	/* terminates the program with exit status 0 */
 
-extern FILE *errfile;   /* file that errors are written to; stderr by default */
-
 extern int errstatus;	/* status returned when exiting due to an error; this is
 			   1 by default */
 
