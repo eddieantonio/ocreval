@@ -24,7 +24,7 @@
 
 #include <signal.h>
 
-#ifdef unix
+#if defined(__unix__) || defined(__MACH__)
 #include <sys/types.h>
 #include <sys/stat.h>
 #else

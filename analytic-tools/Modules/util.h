@@ -29,9 +29,16 @@
 #ifndef _UTIL_
 #define _UTIL_
 
-#include <malloc.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+#ifndef unix
+/* On Linux and Mac OS X */
+#if defined(__unix__) || defined(__MACH__)
+#define unix
+#endif
+#endif
 
 #ifndef True
 typedef char Boolean;
