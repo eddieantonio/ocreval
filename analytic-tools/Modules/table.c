@@ -44,7 +44,7 @@ Table *table;
 }
 /**********************************************************************/
 
-static short index(key)
+static short table_index(key)
 unsigned char *key;
 {
     long i, sum = 0;
@@ -59,7 +59,7 @@ Table *table;
 char *key;
 {
     Entry *entry;
-    for (entry = table->list[index(key)].first; entry &&
+    for (entry = table->list[table_index(key)].first; entry &&
     strcmp(key, entry->key) != 0; entry = entry->next);
     return(entry);
 }
@@ -80,7 +80,7 @@ void table_insert(table, entry)
 Table *table;
 Entry *entry;
 {
-    list_insert_first(&table->list[index(entry->key)], entry);
+    list_insert_first(&table->list[table_index(entry->key)], entry);
     free_array(table);
     table->count++;
 }
@@ -90,7 +90,7 @@ void table_remove(table, entry)
 Table *table;
 Entry *entry;
 {
-    list_remove(&table->list[index(entry->key)], entry);
+    list_remove(&table->list[table_index(entry->key)], entry);
     free_array(table);
     table->count--;
 }
