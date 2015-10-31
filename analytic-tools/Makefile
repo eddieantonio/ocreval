@@ -16,8 +16,8 @@ LIB = Modules/Lib.a
 all: $(DIRS)
 
 # Create every subexecutable.
-%/: % $(LIB)
-	$(MAKE) -C $<
+%/: $(LIB)
+	$(MAKE) -C $@
 
 $(LIB):
 	$(MAKE) -C $(dir $@)
