@@ -1,6 +1,8 @@
 # Get LOCAL_INCLUDE_DIR
 include ../common.mk
 
+CPPFLAGS += -MMD
+
 LIB = Lib.a
 SRCS = $(wildcard *.c)
 OBJS = $(patsubst %.c,%.o,$(SRCS))
