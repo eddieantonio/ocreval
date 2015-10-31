@@ -28,11 +28,5 @@ Building
 ========
 
 Each subdirectory contains the source for one program, a Unix man
-page, and a build script named "Build".  Most programs depend on
-a library that is build by Modules/Build.  To build the library
-and all of the programs, cd into each directory and run ./Build.
-
-A more featureful and flexible build procedure will hopefully come in
-the future.
-
-
+page, and a Makefile.  Most programs depend on a library in Modules/
+To build the library and all of the programs, simply type `make`.
