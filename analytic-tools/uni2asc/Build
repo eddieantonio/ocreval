@@ -1,1 +1,0 @@
-cc -I../Modules -O -o uni2asc uni2asc.c ../Modules/Lib.a
