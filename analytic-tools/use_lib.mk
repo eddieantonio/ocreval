@@ -4,6 +4,7 @@ LOCAL_INCLUDE_DIR := $(abspath $(TOP)Modules)
 
 include $(TOP)/common.mk
 
-# Add libisri, created in Modules/
+# Use libisri, created in Modules/
+CPPFLAGS = -I$(LOCAL_INCLUDE_DIR)
 LDFLAGS = -L$(LOCAL_INCLUDE_DIR)
-LDLIBS = -lisri -lm
+LDLIBS += -lisri
