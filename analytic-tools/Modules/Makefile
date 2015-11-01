@@ -3,7 +3,7 @@ include ../common.mk
 
 CPPFLAGS += -MMD
 
-LIB = Lib.a
+LIB = libisri.a
 SRCS = $(wildcard *.c)
 OBJS = $(patsubst %.c,%.o,$(SRCS))
 DEPS := $(patsubst %.c,%.d,$(SRCS))

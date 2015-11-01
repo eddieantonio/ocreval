@@ -4,8 +4,6 @@ LOCAL_INCLUDE_DIR := $(abspath $(TOP)Modules)
 
 include $(TOP)/common.mk
 
-LDFLAGS = $(LOCAL_INCLUDE_DIR)/Lib.a -lm
-
-# ld(1) needs the LDFLAGS at the end for some dumb reason.
-%: %.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $< $(LDFLAGS)
+# Add libisri, created in Modules/
+LDFLAGS = -L$(LOCAL_INCLUDE_DIR)
+LDLIBS = -lisri -lm
