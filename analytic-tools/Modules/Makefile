@@ -12,7 +12,7 @@ DEPS := $(patsubst %.c,%.d,$(SRCS))
 all: $(LIB)
 
 $(LIB): $(OBJS)
-	ar -rs $@ $(OBJS)
+	$(AR) $(ARFLAGS) -s $@ $^
 
 # Include dependencies from -d
 -include $(DEPS)
