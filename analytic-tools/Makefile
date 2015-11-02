@@ -11,7 +11,7 @@ MANDIR = $(PREFIX)/share/man/man1
 DIRS = $(TOOLS:=/)
 EXECUTABLES = $(foreach D,$(TOOLS),$D/$D)
 MANPAGES = $(EXECUTABLES:=.1)
-LIB = Modules/Lib.a
+LIB = Modules/libisri.a
 
 all: $(DIRS)
 
