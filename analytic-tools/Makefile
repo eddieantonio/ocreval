@@ -1,8 +1,8 @@
 include common.mk
 
-TOOLS = accci accdist accsum accuracy asc2uni editop editopcost \
-	editopsum groupacc ngram nonstopacc synctext uni2asc vote wordacc \
-	wordaccci wordaccdist wordaccsum wordfreq
+TOOLS = accci accdist accsum accuracy editop editopcost editopsum \
+		groupacc ngram nonstopacc synctext vote wordacc wordaccci \
+		wordaccdist wordaccsum wordfreq
 
 PREFIX = /usr/local
 BINDIR = $(PREFIX)/bin
