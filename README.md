@@ -20,23 +20,28 @@ Using [Homebrew][brew]:
  - [utf8proc](https://github.com/JuliaLang/utf8proc)
 
 ### OS X
-        brew tap eddieantonio/eddieantonio
-        brew install utf8proc
 
-### Debian (may not be in your package repository)
-        sudo apt-get install libutf8proc-dev
+    brew tap eddieantonio/eddieantonio
+    brew install utf8proc
+
+### Ubuntu/Debian 
+
+If this package is not in your package repository, follow "Other Linux"
+below.
+
+    sudo apt-get install libutf8proc-dev
 
 ### Other Linux
 
-        curl -OL https://github.com/JuliaLang/utf8proc/archive/v1.3.1.tar.gz
-        tar xzf v1.3.1.tar.gz
-        cd utf8proc-1.3.1/
-        make
-        sudo make install
-        # Rebuild the shared object cache - needed to load the library
-        # at runtime <http://linux.die.net/man/8/ldconfig>
-        sudo ldconfig
-        cd -
+    curl -OL https://github.com/JuliaLang/utf8proc/archive/v1.3.1.tar.gz
+    tar xzf v1.3.1.tar.gz
+    cd utf8proc-1.3.1/
+    make
+    sudo make install
+    # Rebuild the shared object cache - needed to load the library
+    # at runtime <http://linux.die.net/man/8/ldconfig>
+    sudo ldconfig
+    cd -
 
 # Building the tools
 
