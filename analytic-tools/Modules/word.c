@@ -22,6 +22,7 @@
  *
  **********************************************************************/
 
+#include <utf8proc.h>
 #include "word.h"
 
 /**********************************************************************/
@@ -29,9 +30,20 @@
 static Boolean is_wordchar(value)
 Charvalue value;
 {
-    /* TODO: Make this Unicode aware. */
-    return(value >= 'a' && value <= 'z' ||
-    value >= 0xDF && value <= 0xFF && value != 0xF7 ? True : False);
+    const utf8proc_property_t * props = utf8proc_get_property(value);
+
+    switch (props->category) {
+	case UTF8PROC_CATEGORY_LU: /**< Letter, uppercase */
+	case UTF8PROC_CATEGORY_LL: /**< Letter, lowercase */
+	case UTF8PROC_CATEGORY_LT: /**< Letter, titlecase */
+	case UTF8PROC_CATEGORY_LM: /**< Letter, modifier */
+	case UTF8PROC_CATEGORY_LO: /**< Letter, other */
+	/* Allow for private use characters. */
+	case UTF8PROC_CATEGORY_CO: /**< Other, private use */
+	    return True;
+	default:
+	    return False;
+    }
 }
 /**********************************************************************/
 
