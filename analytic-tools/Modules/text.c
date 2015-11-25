@@ -130,7 +130,7 @@ int suspect_marker;
 /**
  * Blank characters EXCEPT the newline!
  */
-static bool is_blank(character)
+static Boolean is_blank(character)
 utf8proc_int32_t character;
 {
     const utf8proc_property_t * props = utf8proc_get_property(character);
@@ -243,6 +243,47 @@ utf8proc_uint8_t *buffer;
 }
 /**********************************************************************/
 
+/**
+ * Is this generally considered to be a graphic character?
+ */
+static Boolean is_graphic_character(character)
+utf8proc_int32_t character;
+{
+    const utf8proc_property_t * props = utf8proc_get_property(character);
+
+    switch (props->category) {
+	case UTF8PROC_CATEGORY_LU: /**< Letter, uppercase */
+	case UTF8PROC_CATEGORY_LL: /**< Letter, lowercase */
+	case UTF8PROC_CATEGORY_LT: /**< Letter, titlecase */
+	case UTF8PROC_CATEGORY_LM: /**< Letter, modifier */
+	case UTF8PROC_CATEGORY_LO: /**< Letter, other */
+	case UTF8PROC_CATEGORY_MN: /**< Mark, nonspacing */
+	case UTF8PROC_CATEGORY_MC: /**< Mark, spacing combining */
+	case UTF8PROC_CATEGORY_ME: /**< Mark, enclosing */
+	case UTF8PROC_CATEGORY_ND: /**< Number, decimal digit */
+	case UTF8PROC_CATEGORY_NL: /**< Number, letter */
+	case UTF8PROC_CATEGORY_NO: /**< Number, other */
+	case UTF8PROC_CATEGORY_PC: /**< Punctuation, connector */
+	case UTF8PROC_CATEGORY_PD: /**< Punctuation, dash */
+	case UTF8PROC_CATEGORY_PS: /**< Punctuation, open */
+	case UTF8PROC_CATEGORY_PE: /**< Punctuation, close */
+	case UTF8PROC_CATEGORY_PI: /**< Punctuation, initial quote */
+	case UTF8PROC_CATEGORY_PF: /**< Punctuation, final quote */
+	case UTF8PROC_CATEGORY_PO: /**< Punctuation, other */
+	case UTF8PROC_CATEGORY_SM: /**< Symbol, math */
+	case UTF8PROC_CATEGORY_SC: /**< Symbol, currency */
+	case UTF8PROC_CATEGORY_SK: /**< Symbol, modifier */
+	case UTF8PROC_CATEGORY_SO: /**< Symbol, other */
+	/* Allow for private use characters. */
+	case UTF8PROC_CATEGORY_CO: /**< Other, private use */
+	    return True;
+	default:
+	    return False;
+    }
+}
+
+/**********************************************************************/
+
 void char_to_string(suspect, value, string, fake_newline)
 Boolean suspect;
 Charvalue value;
@@ -257,17 +298,17 @@ Boolean fake_newline;
 	i += encode_or_die(SUSPECT_MARKER, ustring);
     }
 
-    if (value == NEWLINE)
+    if (value == NEWLINE) {
 	sprintf(&string[i], (fake_newline ? "<\\n>" : "\n"));
-    /* TODO: Base this on character classes. */
-    else if ((value >= BLANK && value <= REJECT_CHARACTER) || value > 0xA0) {
+    } else if (is_graphic_character(value)) {
 	/* It's a printable character. */
 	i += encode_or_die(value, &ustring[i]);
 	string[i++] = '\0';
-    } else if (value < 256)
+    } else if (value < 256) {
 	sprintf(&string[i], "<%02X>", value);
-    else
+    } else {
 	sprintf(&string[i], "<%04X>", value);
+    }
 }
 /**********************************************************************/
 
