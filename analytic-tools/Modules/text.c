@@ -192,7 +192,7 @@ Textopt *textopt;
 }
 
 /**********************************************************************/
-utf8proc_ssize_t encode_or_die(codepoint, buffer)
+signed char encode_or_die(codepoint, buffer)
 utf8proc_int32_t codepoint;
 utf8proc_uint8_t *buffer;
 {

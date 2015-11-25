@@ -103,9 +103,10 @@ void char_to_string(/* Boolean suspect, Charvalue value, char *string,
 			   True, the newline character is represented by <\n>,
 			   which is desirable for some reports */
 
-ssize_t encode_or_die(/* Charvalue value, char *string */);
-			/* Writes a Unicode value to the given string.
-			 * Exits if the value cannot be written. */
+signed char encode_or_die(/* Charvalue value, char *string */);
+			/* writes a Unicode value to the given string;
+			 * exits if the value cannot be written;
+			 * returns characters written to string */
 
 
 void write_text(/* Text *text, char *filename,
