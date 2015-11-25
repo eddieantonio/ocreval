@@ -166,6 +166,7 @@ Char *start;
 	c->value >= 0xC0 && c->value <= 0xDE && c->value != 0xD7)
 	    c->value += 32;
 }
+
 /**********************************************************************/
 
 void read_text(text, filename, textopt)
@@ -189,6 +190,19 @@ Textopt *textopt;
     if (textopt->case_insensitive)
 	lowercase(last ? last->next : text->first);
 }
+
+/**********************************************************************/
+static utf8proc_ssize_t encode_or_die(codepoint, buffer)
+utf8proc_int32_t codepoint;
+utf8proc_uint8_t *buffer;
+{
+    utf8proc_ssize_t status = utf8proc_encode_char(codepoint, buffer);
+    if (status < 1) {
+	error("could not encode UTF-8", Exit);
+    }
+
+    return status;
+}
 /**********************************************************************/
 
 void char_to_string(suspect, value, string, fake_newline)
@@ -198,14 +212,21 @@ char *string;
 Boolean fake_newline;
 {
     short i = 0;
-    if (suspect)
-	string[i++] = SUSPECT_MARKER;
+    utf8proc_uint8_t *ustring = (utf8proc_uint8_t *) string;
+
+    /* Prepend the suspect marker. */
+    if (suspect) {
+	i += encode_or_die(SUSPECT_MARKER, ustring);
+    }
+
     if (value == NEWLINE)
 	sprintf(&string[i], (fake_newline ? "<\\n>" : "\n"));
-    else if (value >= BLANK && value <= REJECT_CHARACTER ||
-    value > 0xA0 && value <= 0xFF)
-	sprintf(&string[i], "%c", value);
-    else if (value < 256)
+    /* TODO: Base this on character classes. */
+    else if ((value >= BLANK && value <= REJECT_CHARACTER) || value > 0xA0) {
+	/* It's a printable character. */
+	i += encode_or_die(value, &ustring[i]);
+	string[i++] = '\0';
+    } else if (value < 256)
 	sprintf(&string[i], "<%02X>", value);
     else
 	sprintf(&string[i], "<%04X>", value);

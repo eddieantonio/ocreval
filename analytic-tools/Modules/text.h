@@ -5,10 +5,11 @@
  *  This module provides definitions and routines to support the reading
  *  and writing of OCR-generated text.  A "Text" structure is defined to
  *  be a linked list of "Char" structures, where each "Char" structure
- *  gives the value of one 16-bit character and indicates whether it
+ *  gives the value of one 32-bit Unicode character and indicates whether it
  *  is suspect.
  *
- *  Author: Stephen V. Rice
+ *  Author: Stephen V. Rice (1996)
+ *  Author: Eddie Antonio Santos (2015)
  *  
  * Copyright 1996 The Board of Regents of the Nevada System of Higher
  * Education, on behalf, of the University of Nevada, Las Vegas,
@@ -91,7 +92,7 @@ void read_text(/* Text *text, char *filename, Textopt *textopt */);
 			   character to "text"; reports an error and quits if
 			   unable to open the file */
 
-#define STRING_SIZE  8
+#define STRING_SIZE (max(sizeof("^🦄"), sizeof("<10FFFF>")))
 
 void char_to_string(/* Boolean suspect, Charvalue value, char *string,
 		       Boolean fake_newline */);
