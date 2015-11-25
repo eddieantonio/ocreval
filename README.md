@@ -15,6 +15,19 @@ Using [Homebrew][brew]:
 
 # Building
 
+## Dependencies
+
+ - [utf8proc](https://github.com/JuliaLang/utf8proc)
+
+        # OS X
+        brew tap eddieantonio/eddieantonio
+        brew install utf8proc
+
+        # Ubuntu
+        sudo apt-get install libutf8proc-dev
+
+# Building the tools
+
 Either:
 
     cd analytical-tools && make
@@ -26,5 +39,5 @@ Or:
 
 # Porting Credits
 
-Ported by Eddie Antonio Santos, 2015. See analytical-tools/NOTICE
-for copyright information regarding the original code.
+Ported by Eddie Antonio Santos, 2015. See analytical-tools/NOTICE for
+copyright information regarding the original code.

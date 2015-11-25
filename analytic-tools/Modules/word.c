@@ -29,6 +29,7 @@
 static Boolean is_wordchar(value)
 Charvalue value;
 {
+    /* TODO: Make this Unicode aware. */
     return(value >= 'a' && value <= 'z' ||
     value >= 0xDF && value <= 0xFF && value != 0xF7 ? True : False);
 }
@@ -38,7 +39,7 @@ void find_words(wordlist, text)
 Wordlist *wordlist;
 Text *text;
 {
-    unsigned char string[MAX_WORDLENGTH + 1];
+    char string[MAX_WORDLENGTH + 1];
     long len = 0, i;
     Charvalue value;
     Word *word;
@@ -48,8 +49,9 @@ Text *text;
 	value = (i < text->count ? text->array[i]->value : 0);
 	if (is_wordchar(value))
 	{
-	    if (len < MAX_WORDLENGTH)
-		string[len++] = value;
+	    if (len + 3 < MAX_WORDLENGTH) {
+		len += encode_or_die(value, string + len);
+	    }
 	}
 	else if (len > 0)
 	{
