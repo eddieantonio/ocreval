@@ -127,17 +127,50 @@ int suspect_marker;
 }
 /**********************************************************************/
 
+/**
+ * Blank characters EXCEPT the newline!
+ */
+static bool is_blank(character)
+utf8proc_int32_t character;
+{
+    const utf8proc_property_t * props = utf8proc_get_property(character);
+
+    /* Special case: a newline is a NEWLINE; not a BLANK. */
+    if (character == '\n') {
+	return False;
+    }
+
+    /* Is it some kind of space? */
+    if (props->category == UTF8PROC_CATEGORY_ZS) {
+	return True;
+    }
+
+    /* See: http://unicode.org/reports/tr9/#Bidirectional_Character_Types */
+    switch (props->bidi_class) {
+	case UTF8PROC_BIDI_CLASS_B:  /* Newline-y characters */
+	case UTF8PROC_BIDI_CLASS_S:  /* Tab */
+	case UTF8PROC_BIDI_CLASS_WS: /* Whitespace; does not count NBSP. */
+	    return True;
+    }
+
+    return False;
+}
+
+
+/**********************************************************************/
+
 static void compress_spacing(text, start)
 Text *text;
 Char *start;
 {
     Boolean found_non_blank = False;
     Char *c, *next;
+
+    /* Normalize all blank-y charcaters to BLANK. */
     for (c = start; c; c = c->next)
-	/* TODO: Use Unicode character values. */
-	if (c->value <= '\r' && (c->value >= '\v' || c->value == '\t') ||
-	c->value == 0xA0)
+	if (is_blank(c->value))
 	    c->value = BLANK;
+
     c = start;
     while (c)
     {
