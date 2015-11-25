@@ -175,17 +175,18 @@ Char *start;
     while (c)
     {
 	next = c->next;
-	if (c->value == BLANK && (!found_non_blank || !next ||
-	next->value == BLANK || next->value == NEWLINE) ||
-	c->value == NEWLINE && !found_non_blank)
+	if ((c->value == BLANK && (!found_non_blank || !next ||
+		next->value == BLANK || next->value == NEWLINE)) ||
+	    (c->value == NEWLINE && !found_non_blank))
 	{
 	    if (found_non_blank && next && next->value == BLANK)
 		next->suspect |= c->suspect;
 	    list_remove(text, c);
 	    free(c);
-	}
-	else
+	} else {
 	    found_non_blank = (c->value == NEWLINE ? False : True);
+	}
+
 	c = next;
     }
 }
