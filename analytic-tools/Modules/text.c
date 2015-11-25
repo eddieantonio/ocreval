@@ -135,21 +135,25 @@ utf8proc_int32_t character;
 {
     const utf8proc_property_t * props = utf8proc_get_property(character);
 
-    /* Special case: a newline is a NEWLINE; not a BLANK. */
-    if (character == '\n') {
-	return False;
+    /* Cases from ISRI < 6.0 */
+    switch (character) {
+	case NEWLINE:
+	    /* Special case: a newline is a NEWLINE; not a BLANK. */
+	    return False;
+
+	case '\t':
+	case LINE_TABULATION:
+	case FORM_FEED:
+	case CARRIAGE_RETURN:
+	case NON_BREAKING_SPACE:
+	    return True;
     }
 
-    /* Is it some kind of space? */
-    if (props->category == UTF8PROC_CATEGORY_ZS) {
-	return True;
-    }
-
-    /* See: http://unicode.org/reports/tr9/#Bidirectional_Character_Types */
-    switch (props->bidi_class) {
-	case UTF8PROC_BIDI_CLASS_B:  /* Newline-y characters */
-	case UTF8PROC_BIDI_CLASS_S:  /* Tab */
-	case UTF8PROC_BIDI_CLASS_WS: /* Whitespace; does not count NBSP. */
+    /* See: http://www.unicode.org/versions/Unicode8.0.0/ch04.pdf */
+    switch (props->category) {
+	case UTF8PROC_CATEGORY_ZS:  /* Space characters. */
+	case UTF8PROC_CATEGORY_ZL:  /* Line separators. */
+	case UTF8PROC_CATEGORY_ZP:  /* Paragraph separators. */
 	    return True;
     }
 

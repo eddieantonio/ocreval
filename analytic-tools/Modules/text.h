@@ -37,10 +37,14 @@
 #include "list.h"
 #include "util.h"
 
-#define BLANK             ' '
-#define NEWLINE           '\n'
-#define REJECT_CHARACTER  '~'
-#define SUSPECT_MARKER    '^'
+#define BLANK		    ' '
+#define NEWLINE		    '\n'
+#define LINE_TABULATION     0x00B
+#define FORM_FEED           0x00C
+#define CARRIAGE_RETURN     0x00D
+#define NON_BREAKING_SPACE  0x0A0
+#define REJECT_CHARACTER    '~'
+#define SUSPECT_MARKER	    '^'
 
 /* UTF-32. */
 typedef uint32_t Charvalue;
