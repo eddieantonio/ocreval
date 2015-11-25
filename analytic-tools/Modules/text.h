@@ -31,6 +31,8 @@
 #ifndef _TEXT_
 #define _TEXT_
 
+#include <stdint.h>
+
 #include "list.h"
 #include "util.h"
 
@@ -39,8 +41,9 @@
 #define REJECT_CHARACTER  '~'
 #define SUSPECT_MARKER    '^'
 
-typedef unsigned short Charvalue;
-#define NUM_CHARVALUES  65536
+/* UTF-32. */
+typedef uint32_t Charvalue;
+#define NUM_CHARVALUES  0x10FFFF
 
 BEGIN_ITEM(Char)
     Boolean suspect;
@@ -63,8 +66,10 @@ struct
 			/* if True, any occurrence of the "suspect_marker"
 			   character will be interpreted as marking the
 			   following character as suspect */
-    int suspect_marker; /* applicable when "find_markers" is True; if zero,
+
+    Charvalue suspect_marker; /* applicable when "find_markers" is True; if zero,
 			   SUSPECT_MARKER will be used */
+    /* Deprecated! Silently ignored. */
     Boolean find_hex_values;
 			/* if True, any occurrence of a hex value of the form
 			   <FF> or <FFFF> will be converted to the corresponding
@@ -76,6 +81,7 @@ struct
     Boolean found_header;
 			/* set to True if a header was found; applicable when
 			   "find_header" is True */
+    /* TODO: add NFC and NFD options. */
 } Textopt;
 
 void read_text(/* Text *text, char *filename, Textopt *textopt */);

@@ -22,10 +22,18 @@
  *
  **********************************************************************/
 
+#include <utf8proc.h>
+
 #include "text.h"
 
 #define TITLE    "UNLV-ISRI OCR Vendor-Independent Interface Version 5.1\n"
 #define DIVIDER  "------------------------------------------------------\n"
+
+/*
+ * Assert that the internal character size is the same size as UTF-32.
+ * (C89 style!)
+ */
+static int assert_sizes[sizeof(Charvalue) == sizeof(utf8proc_int32_t) ? 0 : -1];
 
 /**********************************************************************/
 
@@ -60,6 +68,7 @@ FILE *f;
 }
 /**********************************************************************/
 
+/* TODO: Add UTF-8 support through utf8proc */
 static void read_contents(f, text, find_markers, suspect_marker)
 FILE *f;
 Text *text;
@@ -67,61 +76,53 @@ Boolean find_markers;
 int suspect_marker;
 {
     Boolean suspect = False;
-    int byte;
+
+    /* Buffer for one full UTF-8 code unit. */
+    utf8proc_uint8_t buffer[4];
+
+    int byte, read_status, decode_status;
+    ssize_t code_unit_size;
+    utf8proc_int32_t code_point;
     byte = getc(f);
+
     while (byte != EOF)
     {
-	if (find_markers && byte == suspect_marker)
+	code_unit_size = utf8proc_utf8class[byte];
+	if (code_unit_size < 1) {
+	    /* Encoding error! Stream is not UTF-8! */
+	    error("invalid UTF-8 character", Exit);
+	}
+
+	buffer[0] = byte;
+	/* Read the remaining bytes into the buffer. */
+	if (code_unit_size > 1) {
+	    read_status = fread(
+		    buffer + 1,
+		    sizeof(utf8proc_uint8_t),
+		    /* The first byte is already in the buffer. */
+		    code_unit_size - 1,
+		    f
+	    );
+
+	    if (read_status != (code_unit_size - 1)) {
+		/* Could not read enough bytes. */
+		error("unexpected end of input", Exit);
+	    }
+	}
+
+	/* Decode a single code unit -> code point. */
+	decode_status = utf8proc_iterate(buffer, sizeof(buffer), &code_point);
+	if (decode_status != code_unit_size) {
+	    error(utf8proc_errmsg(decode_status), Exit);
+	}
+
+	if (find_markers && code_point == suspect_marker) {
 	    suspect = True;
-	else
-	{
-	    append_char(text, suspect, byte);
+	} else {
+	    append_char(text, suspect, code_point);
 	    suspect = False;
 	}
 	byte = getc(f);
-    }
-}
-/**********************************************************************/
-
-static Boolean is_hex(c, value)
-Char *c;
-Charvalue *value;
-{
-    if (c->value >= '0' && c->value <= '9')
-	*value = (*value << 4) + c->value - '0';
-    else if (c->value >= 'A' && c->value <= 'F')
-	*value = (*value << 4) + c->value - 'A' + 10;
-    else
-	return(False);
-    return(True);
-}
-/**********************************************************************/
-
-static void convert_hex(text, start)
-Text *text;
-Char *start;
-{
-    Char *c, *prev;
-    Charvalue value;
-    while (start)
-    {
-	if (start->value == '<' && !(value = 0) &&
-	(c = start->next) && is_hex(c, &value) &&
-	(c = c->next) && is_hex(c, &value) &&
-	(c = c->next) && (c->value == '>' || is_hex(c, &value) &&
-	(c = c->next) && is_hex(c, &value) &&
-	(c = c->next) && c->value == '>'))
-	{
-	    start->value = value;
-	    while (c != start)
-	    {
-		prev = c->prev;
-		list_remove(text, c);
-		free(c);
-		c = prev;
-	    }
-	}
-	start = start->next;
     }
 }
 /**********************************************************************/
@@ -183,8 +184,6 @@ Textopt *textopt;
     read_contents(f, text, textopt->find_markers, 
     (textopt->suspect_marker ? textopt->suspect_marker : SUSPECT_MARKER));
     close_file(f);
-    if (textopt->find_hex_values)
-	convert_hex(text, (last ? last->next : text->first));
     if (textopt->normalize)
 	compress_spacing(text, (last ? last->next : text->first));
     if (textopt->case_insensitive)
