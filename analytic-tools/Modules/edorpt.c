@@ -24,8 +24,9 @@
 
 #include "edorpt.h"
 #include "util.h"
+#include "isri_version.h"
 
-#define TITLE    "UNLV-ISRI Edit Operation Report Version 5.1\n"
+#define TITLE    "UNLV-ISRI Edit Operation Report Version " ISRI_VERSION "\n"
 #define DIVIDER  "-------------------------------------------\n"
 
 static unsigned char line[100];

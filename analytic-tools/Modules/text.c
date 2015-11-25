@@ -25,8 +25,9 @@
 #include <utf8proc.h>
 
 #include "text.h"
+#include "isri_version.h"
 
-#define TITLE    "UNLV-ISRI OCR Vendor-Independent Interface Version 5.1\n"
+#define TITLE    "UNLV-ISRI OCR Vendor-Independent Interface Version " ISRI_VERSION "\n"
 #define DIVIDER  "------------------------------------------------------\n"
 
 /*

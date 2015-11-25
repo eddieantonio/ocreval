@@ -24,8 +24,9 @@
 
 #include "accrpt.h"
 #include "sort.h"
+#include "isri_version.h"
 
-#define TITLE    "UNLV-ISRI OCR Accuracy Report Version 5.1\n"
+#define TITLE    "UNLV-ISRI OCR Accuracy Report Version " ISRI_VERSION "\n"
 #define DIVIDER  "-----------------------------------------\n"
 
 #define CLASS_OFFSET  29

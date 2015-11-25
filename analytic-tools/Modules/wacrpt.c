@@ -24,8 +24,9 @@
 
 #include "sort.h"
 #include "wacrpt.h"
+#include "isri_version.h"
 
-#define TITLE    "UNLV-ISRI OCR Word Accuracy Report Version 5.1\n"
+#define TITLE    "UNLV-ISRI OCR Word Accuracy Report Version " ISRI_VERSION "\n"
 #define DIVIDER  "----------------------------------------------\n"
 
 #define TOTAL    " Total\n"
