@@ -7,4 +7,4 @@ include $(TOP)/common.mk
 # Use libisri, created in Modules/
 CPPFLAGS += -I$(LOCAL_INCLUDE_DIR)
 LDFLAGS += -L$(LOCAL_INCLUDE_DIR)
-LDLIBS += -lisri
+LDLIBS := -lisri $(LDLIBS)
