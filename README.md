@@ -1,8 +1,11 @@
 # isri-ocr-evaluation-tools
 
-The ISRI Analytic Tools for OCR Evaluation
+The ISRI Analytic Tools consist of 17 tools for measuring the
+performance of and experimenting with OCR output. See [the user
+guide][user-guide]
+for more information.
 
-Ported to compile on modern systems (like OS X, El Capitan).
+[ug]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/blob/HEAD/user-guide.pdf
 
 # Install (OS X)
 
@@ -13,7 +16,12 @@ Using [Homebrew][brew]:
 
 [brew]: http://brew.sh/
 
-# Building
+Building
+========
+
+Each subdirectory contains the source for one program, a Unix man
+page, and a Makefile.  Most programs depend on a library in Modules/
+To build the library and all of the programs, simply type `make`.
 
 ## Dependencies
 
@@ -22,9 +30,9 @@ Using [Homebrew][brew]:
 ### OS X
 
     brew tap eddieantonio/eddieantonio
-    brew install utf8proc
+    brew install libutf8proc
 
-### Ubuntu/Debian 
+### Ubuntu/Debian
 
 If this package is not in your package repository, follow "Other Linux"
 below.
@@ -43,18 +51,39 @@ below.
     sudo ldconfig
     cd -
 
-# Building the tools
+## Building the tools
 
-Either:
+    make
 
-    cd analytical-tools && make
+## Installing
 
-Or:
+Install to `/usr/local/`:
 
-    make -C analytical-tools
-
+   make install
 
 # Porting Credits
 
 Ported by Eddie Antonio Santos, 2015. See analytical-tools/NOTICE for
 copyright information regarding the original code.
+
+# License
+
+The ISRI Analytic Tools for OCR Evaluation
+
+Copyright 2015 Eddie Antonio Santos
+
+Copyright 1996 The Board of Regents of the Nevada System of Higher
+Education, on behalf, of the University of Nevada, Las Vegas,
+Information Science Research Institute
+
+Licensed under the Apache License, Version 2.0 (the "License"); you
+may not use this file except in compliance with the License.  You may
+obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+implied. See the License for the specific language governing
+permissions and limitations under the License.
