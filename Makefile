@@ -8,27 +8,26 @@ PREFIX = /usr/local
 BINDIR = $(PREFIX)/bin
 MANDIR = $(PREFIX)/share/man/man1
 
-DIRS = $(TOOLS:=/)
 EXECUTABLES = $(foreach D,$(TOOLS),$D/$D)
 MANPAGES = $(EXECUTABLES:=.1)
-LIB = Modules/libisri.a
+LIB = Modules
 
-all: $(DIRS)
+all: $(TOOLS)
 
 # Create every subexecutable.
-%/: $(LIB)
+$(TOOLS): $(LIB)
 	$(MAKE) -C $@
 
 $(LIB):
-	$(MAKE) -C $(dir $@)
+	$(MAKE) -C $@
 
 install: install-bin install-man
 
-install-bin: $(DIRS)
+install-bin: $(TOOLS)
 	mkdir -p $(BINDIR)
 	cp $(EXECUTABLES) $(BINDIR)/
 
-install-man: $(DIRS)
+install-man: $(TOOLS)
 	mkdir -p $(MANDIR)
 	cp $(MANPAGES) $(MANDIR)/
 
@@ -40,5 +39,6 @@ clean-lib:
 clean-execs:
 	$(RM) $(EXECUTABLES)
 
-# Make Lib.a a phony rule to
 .PHONY: all clean clean-lib clean-execs install install-bin install-bin
+# Always remake subdirs.
+.PHONY: $(LIB) $(MODULES)
