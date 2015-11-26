@@ -5,7 +5,7 @@
  *  This module provides definitions and routines pertaining to words.
  *
  *  Author: Stephen V. Rice
- *  
+ *
  * Copyright 1996 The Board of Regents of the Nevada System of Higher
  * Education, on behalf, of the University of Nevada, Las Vegas,
  * Information Science Research Institute
@@ -33,18 +33,18 @@
 
 BEGIN_ITEM(Word)
     unsigned char *string;
-			/* character string representation of the word */
-END_ITEM(Word);		/* an occurrence of a word */
+                        /* character string representation of the word */
+END_ITEM(Word);         /* an occurrence of a word */
 
 BEGIN_LIST_OF(Word)
-END_LIST(Wordlist);	/* a list of word occurrences */
+END_LIST(Wordlist);     /* a list of word occurrences */
 
 void find_words(/* Wordlist *wordlist, Text *text */);
-			/* finds the word occurrences in "text" and appends
-			   them to "wordlist" in sequence; all letters in
-			   "text" are assumed to be in lowercase */
+                        /* finds the word occurrences in "text" and appends
+                           them to "wordlist" in sequence; all letters in
+                           "text" are assumed to be in lowercase */
 
 void free_word(/* Word *word */);
-			/* de-allocates a Word structure */
+                        /* de-allocates a Word structure */
 
 #endif
