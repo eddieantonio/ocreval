@@ -1,3 +1,5 @@
 include ../use_lib.mk
 
-all: $(notdir $(abspath .))
+# The name of this directory is also the name of the binary:
+BIN = $(notdir $(abspath .))
+$(BIN): $(BIN).c $(LIBISRI)
