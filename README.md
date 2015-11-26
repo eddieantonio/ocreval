@@ -5,7 +5,7 @@ performance of and experimenting with OCR output. See [the user
 guide][user-guide]
 for more information.
 
-[ug]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/blob/HEAD/user-guide.pdf
+[user-guide]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/blob/HEAD/user-guide.pdf
 
 # Install (OS X)
 
@@ -59,7 +59,7 @@ below.
 
 Install to `/usr/local/`:
 
-   make install
+    make install
 
 # Porting Credits
 
