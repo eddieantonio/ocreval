@@ -3,7 +3,7 @@
  *  accrpt.c
  *
  *  Author: Stephen V. Rice
- *  
+ *
  * Copyright 1996 The Board of Regents of the Nevada System of Higher
  * Education, on behalf, of the University of Nevada, Las Vegas,
  * Information Science Research Institute
@@ -26,13 +26,15 @@
 #include "sort.h"
 #include "isri_version.h"
 
+#include <string.h>
+
 #define TITLE    "UNLV-ISRI OCR Accuracy Report Version " ISRI_VERSION "\n"
 #define DIVIDER  "-----------------------------------------\n"
 
 #define CLASS_OFFSET  29
 #define CONF_OFFSET   20
 
-static unsigned char line[100];
+static char line[100];
 
 /**********************************************************************/
 
@@ -65,16 +67,16 @@ long errors, marked;
     conf = table_lookup(&accdata->conftable, key);
     if (conf)
     {
-	conf->errors += errors;
-	conf->marked += marked;
+        conf->errors += errors;
+        conf->marked += marked;
     }
     else
     {
-	conf = NEW(Conf);
-	conf->key = strdup(key);
-	conf->errors = errors;
-	conf->marked = marked;
-	table_insert(&accdata->conftable, conf);
+        conf = NEW(Conf);
+        conf->key = strdup(key);
+        conf->errors = errors;
+        conf->marked = marked;
+        table_insert(&accdata->conftable, conf);
     }
 }
 /**********************************************************************/
@@ -92,11 +94,11 @@ long *value, *sum_value;
 {
     if (read_line(f) && sscanf(line, "%ld", value) == 1)
     {
-	*sum_value += *value;
-	return(True);
+        *sum_value += *value;
+        return(True);
     }
     else
-	return(False);
+        return(False);
 }
 /**********************************************************************/
 
@@ -108,14 +110,14 @@ Accops *sum_ops;
     if (read_line(f) && sscanf(line, "%ld %ld %ld %ld", &ops.ins, &ops.subst,
     &ops.del, &ops.errors) == 4)
     {
-	sum_ops->ins    += ops.ins;
-	sum_ops->subst  += ops.subst;
-	sum_ops->del    += ops.del;
-	sum_ops->errors += ops.errors;
-	return(True);
+        sum_ops->ins    += ops.ins;
+        sum_ops->subst  += ops.subst;
+        sum_ops->del    += ops.del;
+        sum_ops->errors += ops.errors;
+        return(True);
     }
     else
-	return(False);
+        return(False);
 }
 /**********************************************************************/
 
@@ -148,25 +150,25 @@ char *filename;
     read_ops(f, &accdata->unmarked_ops) &&
     read_ops(f, &accdata->total_ops) && read_line(f))
     {
-	while (read_line(f) && line[0] != NEWLINE);
-	if (errors > 0 && read_line(f))
-	    while (read_two(f, &value1, &value2))
-		add_conf(accdata, &line[CONF_OFFSET], value1, value2);
-	if (characters > 0 && read_line(f))
-	    while (read_two(f, &value1, &value2))
-	    {
-		if (line[CLASS_OFFSET + 2] == '}')
-		    value3 = line[CLASS_OFFSET + 1];
-		else if (line[CLASS_OFFSET + 2] == '\\')
-		    value3 = NEWLINE;
-		else
-		    sscanf(&line[CLASS_OFFSET + 2], "%x", &value3);
-		add_class(accdata, value3, value1, value2);
-	    }
+        while (read_line(f) && line[0] != NEWLINE);
+        if (errors > 0 && read_line(f))
+            while (read_two(f, &value1, &value2))
+                add_conf(accdata, &line[CONF_OFFSET], value1, value2);
+        if (characters > 0 && read_line(f))
+            while (read_two(f, &value1, &value2))
+            {
+                if (line[CLASS_OFFSET + 2] == '}')
+                    value3 = line[CLASS_OFFSET + 1];
+                else if (line[CLASS_OFFSET + 2] == '\\')
+                    value3 = NEWLINE;
+                else
+                    sscanf(&line[CLASS_OFFSET + 2], "%lx", &value3);
+                add_class(accdata, value3, value1, value2);
+            }
     }
     else
-	error_string("invalid format in", (filename ? filename : "stdin"),
-	Exit);
+        error_string("invalid format in", (filename ? filename : "stdin"),
+        Exit);
     close_file(f);
 }
 /**********************************************************************/
@@ -185,9 +187,9 @@ FILE *f;
 long numerator, denominator;
 {
     if (denominator == 0)
-	fprintf(f, "  ------");
+        fprintf(f, "  ------");
     else
-	fprintf(f, "%8.2f", 100.0 * numerator / denominator);
+        fprintf(f, "%8.2f", 100.0 * numerator / denominator);
 }
 /**********************************************************************/
 
@@ -211,11 +213,11 @@ Charvalue value;
     fprintf(f, "%8ld %8ld ", class->count, class->missed);
     write_pct(f, class->count - class->missed, class->count);
     if (string)
-	fprintf(f, "   %s\n", string);
+        fprintf(f, "   %s\n", string);
     else
     {
-	char_to_string(False, value, buffer, True);
-	fprintf(f, "   {%s}\n", buffer);
+        char_to_string(False, value, buffer, True);
+        fprintf(f, "   {%s}\n", buffer);
     }
 }
 /**********************************************************************/
@@ -232,9 +234,9 @@ static int compare_conf(conf1, conf2)
 Conf *conf1, *conf2;
 {
     if (conf1->errors != conf2->errors)
-	return(conf2->errors - conf1->errors);
+        return(conf2->errors - conf1->errors);
     if (conf1->marked != conf2->marked)
-	return(conf2->marked - conf1->marked);
+        return(conf2->marked - conf1->marked);
     return(ustrcmp(conf1->key, conf2->key));
 }
 /**********************************************************************/
@@ -266,23 +268,23 @@ char *filename;
     write_ops(f, &accdata->total_ops, "Total");
     fprintf(f, "\n   Count   Missed   %%Right\n");
     for (i = 0; i < MAX_CHARCLASSES; i++)
-	if (accdata->large_class[i].count > 0)
-	    write_class(f, &accdata->large_class[i], charclass_name(i), 0);
+        if (accdata->large_class[i].count > 0)
+            write_class(f, &accdata->large_class[i], charclass_name(i), 0);
     write_class(f, &accdata->total_class, "Total", 0);
     if (accdata->errors > 0)
     {
-	table_in_array(&accdata->conftable);
-	sort(accdata->conftable.count, accdata->conftable.array, compare_conf);
-	fprintf(f, "\n  Errors   Marked   Correct-Generated\n");
-	for (i = 0; i < accdata->conftable.count; i++)
-	    write_conf(f, accdata->conftable.array[i]);
+        table_in_array(&accdata->conftable);
+        sort(accdata->conftable.count, accdata->conftable.array, compare_conf);
+        fprintf(f, "\n  Errors   Marked   Correct-Generated\n");
+        for (i = 0; i < accdata->conftable.count; i++)
+            write_conf(f, accdata->conftable.array[i]);
     }
     if (accdata->characters > 0)
     {
-	fprintf(f, "\n   Count   Missed   %%Right\n");
-	for (i = 0; i < NUM_CHARVALUES; i++)
-	    if (accdata->small_class[i].count > 0)
-		write_class(f, &accdata->small_class[i], NULL, i);
+        fprintf(f, "\n   Count   Missed   %%Right\n");
+        for (i = 0; i < NUM_CHARVALUES; i++)
+            if (accdata->small_class[i].count > 0)
+                write_class(f, &accdata->small_class[i], NULL, i);
     }
     close_file(f);
 }
