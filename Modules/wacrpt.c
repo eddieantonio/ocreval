@@ -3,7 +3,7 @@
  *  wacrpt.c
  *
  *  Author: Stephen V. Rice
- *  
+ *
  * Copyright 1996 The Board of Regents of the Nevada System of Higher
  * Education, on behalf, of the University of Nevada, Las Vegas,
  * Information Science Research Institute
@@ -32,7 +32,7 @@
 #define TOTAL    " Total\n"
 #define OFFSET   29
 
-static unsigned char line[100];
+static char line[100];
 
 /**********************************************************************/
 
@@ -95,11 +95,12 @@ Wac wac[];
 	while (read_two(f, &count, &missed))
 	{
 	    index = atoi(&line[OFFSET]);
-	    if (index == 0)
+	    if (index == 0) {
 		if (strcmp(&line[OFFSET], TOTAL) == 0)
 		    total_count = count;
 		else /* excess */
 		    index = MAX_OCCURRENCES + 1;
+	    }
 	    increment_wac(&wac[index], count, missed);
 	}
     return(total_count);
