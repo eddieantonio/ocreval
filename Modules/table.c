@@ -44,10 +44,12 @@ Table *table;
 }
 /**********************************************************************/
 
-static short table_index(key)
-const char *key;
+static short table_index(key_string)
+const char *key_string;
 {
+    const unsigned char *key = (const unsigned char*) key_string;
     long i, sum = 0;
+
     for (i = 0; key[i]; i++)
 	sum += key[i];
     return(sum % TABLE_SIZE);
