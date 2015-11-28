@@ -132,10 +132,6 @@ extern int errstatus;	/* status returned when exiting due to an error; this is
 void error(/* char *message, Exit/Continue */);
 			/* writes an error message, then quits or returns */
 
-void error_status(/* char *message, int status, Exit/Continue */);
-			/* writes an error message, including a status code,
-			   then quits or returns */
-
 void error_string(/* char *message, char *string, Exit/Continue */);
 			/* writes an error message, including "string" in
 			   quotes, then quits or returns */

@@ -271,17 +271,6 @@ Boolean exit;
 }
 /**********************************************************************/
 
-void error_status(message, status, exit)
-char *message;
-int status;
-Boolean exit;
-{
-    fprintf(stderr, "%s: %s, status = %d\n", exec_name, message, status);
-    if (exit)
-	quit(errstatus);
-}
-/**********************************************************************/
-
 void error_string(message, string, exit)
 char *message, *string;
 Boolean exit;
