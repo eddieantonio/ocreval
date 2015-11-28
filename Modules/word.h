@@ -32,7 +32,7 @@
 #define MAX_WORDLENGTH  50
 
 BEGIN_ITEM(Word)
-    unsigned char *string;
+    char *string;
                         /* character string representation of the word */
 END_ITEM(Word);         /* an occurrence of a word */
 
