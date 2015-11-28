@@ -277,3 +277,9 @@ char *message, *string;
     fprintf(stderr, "%s: %s \"%s\"\n", exec_name, message, string);
     quit(errstatus);
 }
+
+void warning_string(message, string)
+char *message, *string;
+{
+    fprintf(stderr, "%s: %s \"%s\"\n", exec_name, message, string);
+}
