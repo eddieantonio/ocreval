@@ -34,7 +34,7 @@
  * Assert that the internal character size is the same size as UTF-32.
  * (C89 static assert.)
  */
-static int assert_sizes[sizeof(Charvalue) == sizeof(utf8proc_int32_t) ? 0 : -1];
+static char assert_sizes[sizeof(Charvalue) == sizeof(utf8proc_int32_t) ? 1 : -1];
 
 /**********************************************************************/
 
