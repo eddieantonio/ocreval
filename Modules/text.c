@@ -90,7 +90,7 @@ static void read_contents(f, text, find_markers, suspect_marker)
 		code_unit_size = utf8proc_utf8class[byte];
 		if (code_unit_size < 1) {
 			/* Encoding error! Stream is not UTF-8! */
-			error("invalid UTF-8 character", Exit);
+			error("invalid UTF-8 character");
 		}
 
 		buffer[0] = byte;
@@ -106,14 +106,14 @@ static void read_contents(f, text, find_markers, suspect_marker)
 
 			if (read_status != (code_unit_size - 1)) {
 				/* Could not read enough bytes. */
-				error("unexpected end of input", Exit);
+				error("unexpected end of input");
 			}
 		}
 
 		/* Decode a single code unit -> code point. */
 		decode_status = utf8proc_iterate(buffer, sizeof(buffer), &code_point);
 		if (decode_status != code_unit_size) {
-			error(utf8proc_errmsg(decode_status), Exit);
+			error(utf8proc_errmsg(decode_status));
 		}
 
 		if (find_markers && code_point == suspect_marker) {
@@ -215,7 +215,7 @@ void read_text(text, filename, textopt)
 	Char *last;
 	FILE *f;
 	if (textopt->find_header && !filename)
-		error_string("invalid call to", "read_text", Exit);
+		error_string("invalid call to", "read_text");
 	last = text->last;
 	f = open_file(filename, "r");
 	if (textopt->find_header)
@@ -236,7 +236,7 @@ signed char encode_or_die(codepoint, buffer)
 {
 	utf8proc_ssize_t status = utf8proc_encode_char(codepoint, buffer);
 	if (status < 1) {
-		error("could not encode UTF-8", Exit);
+		error("could not encode UTF-8");
 	}
 
 	return status;

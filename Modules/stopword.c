@@ -72,7 +72,7 @@ char *key;
     Stopword *stopword;
     stopword = table_lookup(&stopwordtable, key);
     if (stopword)
-	error_string("duplicate stopword", key, Continue);
+	warning_string("duplicate stopword", key);
     else
     {
 	stopword = NEW(Stopword);
@@ -88,7 +88,7 @@ char *filename;
     Word *word;
     short i;
     if (initialized)
-	error("stopwords already initialized", Exit);
+	error("stopwords already initialized");
     if (filename)
     {
 	read_text(&text, filename, &textopt);
@@ -108,6 +108,6 @@ Boolean is_stopword(string)
 unsigned char *string;
 {
     if (!initialized)
-	error("stopwords not initialized", Exit);
+	error("stopwords not initialized");
     return(table_lookup(&stopwordtable, string) ? True : False);
 }

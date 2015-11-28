@@ -225,7 +225,7 @@ short num_text;
 Text *text;
 {
     if (num_text < MIN_STREAMS || num_text > MAX_STREAMS)
-	error("invalid number of text streams", Exit);
+	error("invalid number of text streams");
     initialize_synclist(synclist, num_text, text);
     if (synclist->first)
 	recursive_sync(synclist, num_text, text, synclist->first);
@@ -280,7 +280,7 @@ Path *prev_path;
 	start = max(k - 1, prev_path->start_k);
 	stop  = min(k + 1, prev_path->stop_k);
 	if (start > stop)
-	    error("internal synchronization error", Exit);
+	    error("internal synchronization error");
 	for (i = start; i <= stop; i++)
 	{
 	    value = prev_path->f[i - prev_path->start_k];
@@ -436,7 +436,7 @@ Synclist *synclist;
 Text *text;
 {
     if (text[0].count > MAX_F)
-	error("text stream is too long", Exit);
+	error("text stream is too long");
     initialize_synclist(synclist, 2, text);
     compute_pathlist(text);
     obtain_matches(synclist);

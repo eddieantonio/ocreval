@@ -104,7 +104,7 @@ char *argv[];
 {
     short i, m, n;
     if (argc < MIN_VOTERS || argc > MAX_VOTERS)
-	error("invalid number of voters", Exit);
+	error("invalid number of voters");
     for (i = 0; i < argc; i++)
     {
 	voter[i] = NEW(Voter);
@@ -117,12 +117,12 @@ char *argv[];
 	actual_voters = num_voters;
     if (wfraction &&
     !valid_fraction(wfraction, &suspect_weight, &unmarked_weight))
-	error_string("invalid weight", wfraction, Exit);
+	error_string("invalid weight", wfraction);
     if (sfraction)
 	if (valid_fraction(sfraction, &m, &n))
 	    suspect_threshold = actual_voters * unmarked_weight * m / n;
 	else
-	    error_string("invalid threshold", sfraction, Exit);
+	    error_string("invalid threshold", sfraction);
 }
 /**********************************************************************/
 

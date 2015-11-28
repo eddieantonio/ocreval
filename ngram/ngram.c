@@ -60,7 +60,7 @@ short get_n()
 	return(1);
     if (nstring[0] >= '1' && nstring[0] <= '0' + MAX_N && !nstring[1])
 	return(nstring[0] - '0');
-    error_string("invalid value", nstring, Exit);
+    error_string("invalid value", nstring);
 }
 /**********************************************************************/
 
@@ -171,7 +171,7 @@ char *argv[];
     int i;
     initialize(&argc, argv, usage, option);
     if (argc == 0)
-	error("no text files specified", Exit);
+	error("no text files specified");
     n = get_n();
     for (i = 0; i < argc; i++)
 	process_file(argv[i]);

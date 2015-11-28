@@ -79,7 +79,7 @@ char *argv[];
 {
     initialize(&argc, argv, usage, NULL);
     if (argc < 2 || argc > 3)
-	error("invalid number of files", Exit);
+	error("invalid number of files");
     read_text(&text, argv[0], &textopt);
     read_accrpt(&accdata, argv[1]);
     write_report(argc == 3 ? argv[2] : NULL);

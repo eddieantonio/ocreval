@@ -82,7 +82,7 @@ char *argv[];
 {
     initialize(&argc, argv, usage, NULL);
     if (argc != 2)
-	error("invalid number of files", Exit);
+	error("invalid number of files");
     read_text(&text, argv[0], &textopt);
     find_words(&wordlist, &text);
     read_wacrpt(&wacdata, argv[1]);

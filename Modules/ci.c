@@ -70,7 +70,7 @@ double *lower, *upper;
     double ntheta, sum = 0.0, w;
     Obs *obs;
     if (!valid_obslist(obslist))
-	error("not enough observations", Exit);
+	error("not enough observations");
     n = obslist->count;
     obslist->total.theta = accuracy(obslist->total.count,
     obslist->total.missed);

@@ -153,7 +153,7 @@ char *argv[];
     Synclist synclist1, synclist2;
     initialize(&argc, argv, usage, option);
     if (argc < 2 || transpose && argc > 2)
-	error("invalid number of text files", Exit);
+	error("invalid number of text files");
     text = NEW_ARRAY(argc, Text);
     for (i = 0; i < argc; i++)
 	read_text(&text[i], argv[i], &textopt);

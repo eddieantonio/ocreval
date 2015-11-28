@@ -99,7 +99,7 @@ char *filename[];
     {
 	read_text(&text[i], filename[i], &textopt);
 	if (i == 0 && textopt.found_header)
-	    error("no correct file specified", Exit);
+	    error("no correct file specified");
 	find_words(&wordlist[i], &text[i]);
 	symbol[i] = NEW_ARRAY(wordlist[i].count + 1, Symbol);
 	j = 0;
@@ -118,7 +118,7 @@ char *filename[];
     }
     a = setup_array(0, &m);
     if (m > MAX_F)
-	error("text stream is too long", Exit);
+	error("text stream is too long");
     b = setup_array(1, &n);
 }
 /**********************************************************************/
@@ -267,7 +267,7 @@ char *argv[];
 {
     initialize(&argc, argv, usage, option);
     if (argc < 2 || argc > 3)
-	error("invalid number of files", Exit);
+	error("invalid number of files");
     init_stopwords(stopwordfilename);
     setup(argv);
     compute_pathlist();

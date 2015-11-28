@@ -38,7 +38,7 @@ char *argv[];
     int i;
     initialize(&argc, argv, usage, NULL);
     if (argc < 2)
-	error("not enough input files", Exit);
+	error("not enough input files");
     for (i = 0; i < argc; i++)
 	read_edorpt(&edodata, argv[i]);
     write_edorpt(&edodata, NULL);

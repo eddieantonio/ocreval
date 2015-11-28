@@ -65,7 +65,7 @@ char *argv[];
     int i;
     initialize(&argc, argv, usage, NULL);
     if (argc < 2)
-	error("not enough input files", Exit);
+	error("not enough input files");
     for (i = 0; i < argc; i++)
 	process_file(argv[i]);
     write_results();

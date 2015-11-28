@@ -139,7 +139,7 @@ static void initialize_charclass()
 	if (j == num_classes)
 	{
 	    if (num_classes == MAX_CHARCLASSES)
-		error("too many character classes", Exit);
+		error("too many character classes");
 	    num_classes++;
 	    class_name[j] = range[i].name;
 	}
@@ -164,6 +164,6 @@ Charclass class;
     if (num_classes == 0)
 	initialize_charclass();
     if (class >= num_classes)
-	error("invalid character class", Exit);
+	error("invalid character class");
     return(class_name[class]);
 }

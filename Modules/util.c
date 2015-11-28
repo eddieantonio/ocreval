@@ -53,7 +53,7 @@ size_t number, size;
     void *p;
     p = calloc(number, size);
     if (!p)
-	error("unable to allocate memory", Exit);
+	error("unable to allocate memory");
     return(p);
 }
 /**********************************************************************/
@@ -80,9 +80,9 @@ char *filename, *mode;
     if (f)
 	return(f);
     if (mode[0] == 'w')
-	error_string("unable to create file", filename, Exit);
+	error_string("unable to create file", filename);
     else
-	error_string("unable to open file", filename, Exit);
+	error_string("unable to open file", filename);
 }
 /**********************************************************************/
 
@@ -158,7 +158,7 @@ int signal;
     if (handling_interrupt)
 	return;
     handling_interrupt = True;
-    error("process killed", Exit);
+    error("process killed");
 }
 /**********************************************************************/
 
@@ -205,9 +205,9 @@ Option option[];
 	return(False);
     }
 invalid_option:
-    error_string("invalid option", arg, Exit);
+    error_string("invalid option", arg);
 duplicate_option:
-    error_string("duplicate option", arg, Exit);
+    error_string("duplicate option", arg);
 }
 /**********************************************************************/
 
@@ -271,11 +271,9 @@ Boolean exit;
 }
 /**********************************************************************/
 
-void error_string(message, string, exit)
+void error_string(message, string)
 char *message, *string;
-Boolean exit;
 {
     fprintf(stderr, "%s: %s \"%s\"\n", exec_name, message, string);
-    if (exit)
-	quit(errstatus);
+    quit(errstatus);
 }

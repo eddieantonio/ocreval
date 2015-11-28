@@ -167,8 +167,7 @@ char *filename;
             }
     }
     else
-        error_string("invalid format in", (filename ? filename : "stdin"),
-        Exit);
+        error_string("invalid format in", (filename ? filename : "stdin"));
     close_file(f);
 }
 /**********************************************************************/

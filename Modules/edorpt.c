@@ -81,8 +81,7 @@ char *filename;
 		edodata->moves[value2] += value1;
     }
     else
-	error_string("invalid format in", (filename ? filename : "stdin"),
-	Exit);
+	error_string("invalid format in", (filename ? filename : "stdin"));
     close_file(f);
 }
 /**********************************************************************/

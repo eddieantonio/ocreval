@@ -231,10 +231,10 @@ char *argv[];
     Synclist synclist1, synclist2;
     initialize(&argc, argv, usage, option);
     if (argc < 2 || argc > 3)
-	error("invalid number of files", Exit);
+	error("invalid number of files");
     read_text(&text1, argv[0], &textopt);
     if (textopt.found_header)
-	error("no correct file specified", Exit);
+	error("no correct file specified");
     read_text(&text2, argv[1], &textopt);
     transpose_sync(&synclist1, &synclist2, &text1, &text2);
     count_insertions(&synclist1, &text1);

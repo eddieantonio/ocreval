@@ -62,7 +62,7 @@ char *argv[];
 {
     initialize(&argc, argv, usage, NULL);
     if (argc < 1 || argc > 2)
-	error("invalid number of files", Exit);
+	error("invalid number of files");
     read_edorpt(&edodata, argv[0]);
     if (argc == 2)
     {

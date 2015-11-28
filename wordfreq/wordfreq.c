@@ -97,7 +97,7 @@ char *argv[];
     int i;
     initialize(&argc, argv, usage, NULL);
     if (argc == 0)
-	error("no text files specified", Exit);
+	error("no text files specified");
     for (i = 0; i < argc; i++)
 	process_file(argv[i]);
     write_report();

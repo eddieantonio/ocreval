@@ -7,7 +7,7 @@
  *  Environment.
  *
  *  Author: Stephen V. Rice
- *  
+ *
  * Copyright 1996 The Board of Regents of the Nevada System of Higher
  * Education, on behalf, of the University of Nevada, Las Vegas,
  * Information Science Research Institute
@@ -126,14 +126,14 @@ void terminate();	/* terminates the program with exit status 0 */
 extern int errstatus;	/* status returned when exiting due to an error; this is
 			   1 by default */
 
-#define Exit      1
-#define Continue  0
-
-void error(/* char *message, Exit/Continue */);
+void error(/* char *message */);
 			/* writes an error message, then quits or returns */
 
-void error_string(/* char *message, char *string, Exit/Continue */);
+void error_string(/* char *message, char *string */);
 			/* writes an error message, including "string" in
-			   quotes, then quits or returns */
+			   quotes, then quits */
+
+void warning_string(/* char *message, char *string */);
+			/* writes an warning message, including "string" */
 
 #endif

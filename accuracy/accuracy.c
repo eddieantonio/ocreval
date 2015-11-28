@@ -136,10 +136,10 @@ char *argv[];
     Synclist synclist;
     initialize(&argc, argv, usage, NULL);
     if (argc < 2 || argc > 3)
-	error("invalid number of files", Exit);
+	error("invalid number of files");
     read_text(&text[0], argv[0], &textopt);
     if (textopt.found_header)
-	error("no correct file specified", Exit);
+	error("no correct file specified");
     read_text(&text[1], argv[1], &textopt);
     fastukk_sync(&synclist, text);
     process_synclist(&synclist);
