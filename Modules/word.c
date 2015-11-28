@@ -69,7 +69,7 @@ void find_words(wordlist, text)
         {
             word = NEW(Word);
             string[len] = '\0';
-            word->string = (unsigned char *) strdup(string);
+            word->string = strdup(string);
             list_insert_last(wordlist, word);
             len = 0;
         }
