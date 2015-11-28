@@ -121,15 +121,18 @@ void initialize(/* int *argc, char *argv[], char *usage, Option option[] */);
 			   has been set; "option" may be NULL if there are no
 			   options */
 
-void terminate();	/* terminates the program with exit status 0 */
+void terminate()	/* terminates the program with exit status 0 */
+    __attribute__ ((noreturn));
 
 extern int errstatus;	/* status returned when exiting due to an error; this is
 			   1 by default */
 
-void error(/* char *message */);
+void error(/* char *message */)
+    __attribute__ ((noreturn));
 			/* writes an error message, then quits or returns */
 
-void error_string(/* char *message, char *string */);
+void error_string(/* char *message, char *string */)
+    __attribute__ ((noreturn));
 			/* writes an error message, including "string" in
 			   quotes, then quits */
 

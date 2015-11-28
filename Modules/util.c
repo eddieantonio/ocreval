@@ -44,6 +44,7 @@ void (*cleanup_routine)();
 int errstatus = 1;
 
 static short tempfile_id;
+static void quit(/* int status */) __attribute__ ((noreturn));
 
 /**********************************************************************/
 
@@ -261,13 +262,11 @@ void terminate()
 }
 /**********************************************************************/
 
-void error(message, exit)
+void error(message)
 char *message;
-Boolean exit;
 {
     fprintf(stderr, "%s: %s\n", exec_name, message);
-    if (exit)
-	quit(errstatus);
+    quit(errstatus);
 }
 /**********************************************************************/
 
