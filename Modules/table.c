@@ -45,7 +45,7 @@ Table *table;
 /**********************************************************************/
 
 static short table_index(key)
-unsigned char *key;
+const char *key;
 {
     long i, sum = 0;
     for (i = 0; key[i]; i++)
