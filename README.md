@@ -2,8 +2,7 @@
 
 The ISRI Analytic Tools consist of 17 tools for measuring the
 performance of and experimenting with OCR output. See [the user
-guide][user-guide]
-for more information.
+guide][user-guide] for more information.
 
 [user-guide]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/blob/HEAD/user-guide.pdf
 
@@ -29,8 +28,7 @@ To build the library and all of the programs, simply type `make`.
 
 ### OS X
 
-    brew tap eddieantonio/eddieantonio
-    brew install libutf8proc
+    brew install utf8proc
 
 ### Ubuntu/Debian
 
@@ -40,6 +38,12 @@ below.
     sudo apt-get install libutf8proc-dev
 
 ### Other Linux
+
+The automated way (copy-paste this one line):
+
+    curl -fsSL http://www.eddieantonio.ca/isri-ocr-evaluation-tools/install_utf8proc.sh | sh
+
+The manual way:
 
     curl -OL https://github.com/JuliaLang/utf8proc/archive/v1.3.1.tar.gz
     tar xzf v1.3.1.tar.gz
