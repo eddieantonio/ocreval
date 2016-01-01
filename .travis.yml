@@ -1,0 +1,18 @@
+language: c
+compiler:
+- clang
+- gcc
+
+script:
+- 'make && make test'
+
+sudo: required
+install:
+  - 'curl -fsSL http://www.eddieantonio.ca/isri-ocr-evaluation-tools/install_utf8proc.sh | sh'
+---
+# Use this setup when packages from Xenial are avaialble on Travis
+sudo: false
+addons:
+  apt:
+    packages:
+    - libutf8proc-dev
