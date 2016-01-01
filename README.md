@@ -1,5 +1,7 @@
 # isri-ocr-evaluation-tools
 
+[![Build Status](https://travis-ci.org/eddieantonio/isri-ocr-evaluation-tools.svg?branch=master)](https://travis-ci.org/eddieantonio/isri-ocr-evaluation-tools)
+
 The ISRI Analytic Tools consist of 17 tools for measuring the
 performance of and experimenting with OCR output. See [the user
 guide][user-guide] for more information.
