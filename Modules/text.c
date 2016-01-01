@@ -29,6 +29,9 @@
 
 #define TITLE    "UNLV-ISRI OCR Vendor-Independent Interface Version " ISRI_VERSION "\n"
 #define DIVIDER  "------------------------------------------------------\n"
+/* Combining characters often use this character as a placeholder base
+ * character: e.g., ◌̉ */
+#define DOTTED_CIRCLE 0x25CC
 
 /*
  * Assert that the internal character size is the same size as UTF-32.
@@ -283,6 +286,24 @@ static Boolean is_graphic_character(character)
 }
 /**********************************************************************/
 
+/**
+ * Is this a combining characer?
+ *
+ */
+static Boolean is_combining_character(character)
+	utf8proc_int32_t character;
+{
+    switch (utf8proc_category(character)) {
+        case UTF8PROC_CATEGORY_MN:
+        case UTF8PROC_CATEGORY_MC:
+        case UTF8PROC_CATEGORY_ME:
+            return True;
+        default:
+            return False;
+    }
+}
+/**********************************************************************/
+
 void char_to_string(suspect, value, string, fake_newline)
 	Boolean suspect;
 	Charvalue value;
@@ -300,6 +321,10 @@ void char_to_string(suspect, value, string, fake_newline)
 	if (value == NEWLINE) {
 		sprintf(&string[i], (fake_newline ? "<\\n>" : "\n"));
 	} else if (is_graphic_character(value)) {
+		if (is_combining_character(value)) {
+			i += encode_or_die(DOTTED_CIRCLE, &ustring[i]);
+		}
+
 		/* It's a printable character. */
 		i += encode_or_die(value, &ustring[i]);
 		string[i++] = '\0';

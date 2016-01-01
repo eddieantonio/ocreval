@@ -55,7 +55,7 @@ typedef uint32_t Charvalue;
 
 /* Maxiumum char size of a single char_to_string() operation, including the
  * null-terminator. */
-#define STRING_SIZE (max(sizeof("^🦄"), sizeof("<10FFFF>")))
+#define STRING_SIZE (max(sizeof("^◌𐇽"), sizeof("<10FFFF>")))
 
 BEGIN_ITEM(Char)
     Boolean suspect;

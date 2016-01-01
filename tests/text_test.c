@@ -38,6 +38,62 @@ TEST cstring_to_text_should_handle_astral_code_points() {
     PASS();
 }
 
+TEST char_to_string_converts_printable_ascii() {
+    char buffer[STRING_SIZE];
+
+    char_to_string(False, '%', buffer, False);
+    ASSERT_STR_EQ("%", buffer);
+
+    PASS();
+}
+
+TEST char_to_string_converts_non_printable_ascii() {
+    char buffer[STRING_SIZE];
+
+    char_to_string(False, 0x0007, buffer, False);
+    ASSERT_STR_EQ("<07>", buffer);
+
+    PASS();
+}
+
+TEST char_to_string_converts_printable_bmp() {
+    char buffer[STRING_SIZE];
+
+    char_to_string(False, 0x50cd, buffer, False);
+    ASSERT_STR_EQ("働", buffer);
+
+    PASS();
+}
+
+TEST char_to_string_converts_astral_code_points() {
+    char buffer[STRING_SIZE];
+
+    char_to_string(False, 0x0101E1, buffer, False);
+    ASSERT_STR_EQ("𐇡", buffer);
+
+    PASS();
+}
+
+TEST char_to_string_converts_bmp_combiner() {
+    char buffer[STRING_SIZE];
+
+    char_to_string(False, 0x0309, buffer, False);
+    ASSERT_STR_EQ("◌̉", buffer);
+
+    PASS();
+}
+
+TEST char_to_string_converts_astral_combiner() {
+    char buffer[STRING_SIZE];
+
+    char_to_string(False, 0x0101FD, buffer, False);
+    ASSERT_STR_EQ("◌𐇽", buffer);
+
+    PASS();
+}
+
+/*****/
+
 static void initialize_text(void *unused) {
     text = &text_;
     list_initialize(text);
@@ -56,4 +112,11 @@ SUITE(text_suite) {
     RUN_TEST(cstring_to_text_should_handle_latin);
     RUN_TEST(cstring_to_text_should_handle_bmp);
     RUN_TEST(cstring_to_text_should_handle_astral_code_points);
+
+    RUN_TEST(char_to_string_converts_printable_ascii);
+    RUN_TEST(char_to_string_converts_non_printable_ascii);
+    RUN_TEST(char_to_string_converts_printable_bmp);
+    RUN_TEST(char_to_string_converts_astral_code_points);
+    RUN_TEST(char_to_string_converts_bmp_combiner);
+    RUN_TEST(char_to_string_converts_astral_combiner);
 }
