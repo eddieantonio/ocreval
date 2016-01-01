@@ -67,14 +67,14 @@ Install to `/usr/local/`:
 
 # Porting Credits
 
-Ported by Eddie Antonio Santos, 2015. See analytical-tools/NOTICE for
-copyright information regarding the original code.
+Ported by Eddie Antonio Santos, 2015, 2016. See analytical-tools/NOTICE
+for copyright information regarding the original code.
 
 # License
 
 The ISRI Analytic Tools for OCR Evaluation
 
-Copyright 2015 Eddie Antonio Santos
+Copyright 2015, 2016 Eddie Antonio Santos
 
 Copyright 1996 The Board of Regents of the Nevada System of Higher
 Education, on behalf, of the University of Nevada, Las Vegas,

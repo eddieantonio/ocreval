@@ -3,6 +3,9 @@
  *  word.c
  *
  *  Author: Stephen V. Rice
+ *  Author: Eddie Antonio Santos
+ *
+ * Copyright 2016 Eddie Antonio Santos
  *
  * Copyright 1996 The Board of Regents of the Nevada System of Higher
  * Education, on behalf, of the University of Nevada, Las Vegas,
