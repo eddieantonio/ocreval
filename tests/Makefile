@@ -4,6 +4,6 @@ test: run
 	./$< $(TEST_ARGS)
 
 run: run.c $(wildcard *_test.c) $(LIBISRI)
-	$(LINK.c) $< -o $@
+	$(LINK.c) $< -lisri -lutf8proc -o $@
 
 .PHONY: test

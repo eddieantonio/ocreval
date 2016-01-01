@@ -281,7 +281,6 @@ static Boolean is_graphic_character(character)
 			return False;
 	}
 }
-
 /**********************************************************************/
 
 void char_to_string(suspect, value, string, fake_newline)
@@ -334,4 +333,28 @@ void write_text(text, filename, write_header)
 		fputs(string, f);
 	}
 	close_file(f);
+}
+
+/**********************************************************************/
+
+Boolean cstring_to_text(text, string)
+	Text* text;
+	const char *string;
+{
+	const char *c = string;
+	int decode_status = 0;
+	utf8proc_int32_t code_point = 0;
+
+	for (c = string; *c != '\0'; c += decode_status) {
+		/* Try to read a UTF-8 code unit... */
+		decode_status = utf8proc_iterate((utf8proc_uint8_t *) c, -1, &code_point);
+
+		if (decode_status < 1) {
+			return false;
+		}
+
+		append_char(text, false, code_point);
+	}
+
+	return true;
 }

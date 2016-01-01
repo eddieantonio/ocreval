@@ -113,6 +113,10 @@ signed char encode_or_die(/* Charvalue value, char *string */);
                          * exits if the value cannot be written;
                          * returns characters written to string */
 
+Boolean cstring_to_text(Text* text, const char *string);
+                        /* appends the UTF-8 string to the text list;
+                         * exits if the value cannot be written; */
+
 
 void write_text(/* Text *text, char *filename,
                    void (*write_header)(FILE *f) */);
