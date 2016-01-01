@@ -1,10 +1,8 @@
 #include "greatest.h"
+#include "test_utils.h"
 
 #include <list.h>
 #include <text.h>
-
-static Text text_;
-static Text* text;
 
 TEST cstring_to_text_should_handle_ascii_strings() {
     ASSERT(cstring_to_text(text, "hello"));
@@ -92,27 +90,17 @@ TEST char_to_string_converts_astral_combiner() {
     PASS();
 }
 
-/*****/
-
-static void initialize_text(void *unused) {
-    text = &text_;
-    list_initialize(text);
-}
-
-static void deinitialize_text(void *unused) {
-    /* Frees each character and clears the text. */
-    list_empty(text, free);
-}
-
-SUITE(text_suite) {
-    SET_SETUP(initialize_text, NULL);
-    SET_TEARDOWN(deinitialize_text, NULL);
+SUITE(cstring_to_text_suite) {
+    SET_SETUP(initialize_texts, (Text*[]) {text, NULL});
+    SET_TEARDOWN(deinitialize_texts, (Text*[]) {text, NULL});
 
     RUN_TEST(cstring_to_text_should_handle_ascii_strings);
     RUN_TEST(cstring_to_text_should_handle_latin);
     RUN_TEST(cstring_to_text_should_handle_bmp);
     RUN_TEST(cstring_to_text_should_handle_astral_code_points);
+}
 
+SUITE(char_to_string_suite) {
     RUN_TEST(char_to_string_converts_printable_ascii);
     RUN_TEST(char_to_string_converts_non_printable_ascii);
     RUN_TEST(char_to_string_converts_printable_bmp);

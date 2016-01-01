@@ -7,7 +7,8 @@ GREATEST_MAIN_DEFS();
 int main(int argc, char **argv) {
     GREATEST_MAIN_BEGIN();
 
-    RUN_SUITE(text_suite);
+    RUN_SUITE(cstring_to_text_suite);
+    RUN_SUITE(char_to_string_suite);
 
     GREATEST_MAIN_END();
 }
