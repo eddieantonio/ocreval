@@ -39,6 +39,16 @@ clean-lib:
 clean-execs:
 	$(RM) $(EXECUTABLES)
 
+TEST_ARGS =
+test: $(LIB)
+	$(MAKE) -C tests
+
+# Uses https://github.com/alexch/rerun
+# $ gem install rerun
+watch:
+	rerun --clear --exit --pattern '**/*.{c,h}' -- make test
+
 .PHONY: all clean clean-lib clean-execs install install-bin install-bin
+.PHONY: test watch
 # Always remake subdirs.
 .PHONY: $(LIB) $(MODULES)
