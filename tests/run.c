@@ -1,4 +1,5 @@
 #include "text_test.c"
+#include "word_test.c"
 
 #include "greatest.h"
 
@@ -9,6 +10,8 @@ int main(int argc, char **argv) {
 
     RUN_SUITE(cstring_to_text_suite);
     RUN_SUITE(char_to_string_suite);
+
+    RUN_SUITE(find_words_suite);
 
     GREATEST_MAIN_END();
 }
