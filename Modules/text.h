@@ -54,7 +54,10 @@ typedef uint32_t Charvalue;
 #define NUM_CHARVALUES  0x10FFFF
 
 /* Maxiumum char size of a single char_to_string() operation, including the
- * null-terminator. */
+ * null-terminator. It's either the largetst size of an encoded non-graphic
+ * character (this happens to be U+10FFFF) OR the size of an astral (non-BMP)
+ * combining character, that combines on top of U+25CC DOTTED CIRCLE
+ * WITH a suspect marker! */
 #define STRING_SIZE (max(sizeof("^◌𐇽"), sizeof("<10FFFF>")))
 
 BEGIN_ITEM(Char)

@@ -50,32 +50,59 @@ static Boolean is_wordchar(value)
 }
 /**********************************************************************/
 
+static Boolean forms_boundary(characters)
+    Charvalue *characters;
+{
+    Charvalue left = characters[0];
+    Charvalue right = characters[1];
+
+    return false;
+}
+/**********************************************************************/
+
+static void append_word(buffer, len, wordlist)
+    char* buffer;
+    long len;
+    Wordlist *wordlist;
+{
+    Word *word;
+
+    word = NEW(Word);
+    /* Null-terminate the buffer. */
+    buffer[len] = '\0';
+    word->string = strdup(buffer);
+    list_insert_last(wordlist, word);
+}
+/**********************************************************************/
+
 void find_words(wordlist, text)
     Wordlist *wordlist;
     Text *text;
 {
     char string[MAX_WORDLENGTH + 1];
-    long len = 0, i;
+    long len = 0;
     Charvalue value;
-    Word *word;
-    list_in_array(text);
-    for (i = 0; i < text->count || len > 0; i++)
+    Char *current;
+    Boolean in_word = false;
+
+    for (current = text->first; current != NULL; current = current->next)
     {
-        value = (i < text->count ? text->array[i]->value : 0);
+        value = current->value;
         if (is_wordchar(value))
         {
             if (len + 3 < MAX_WORDLENGTH) {
-                len += encode_or_die(value, string + len);
+                len += encode_or_die(value, &string[len]);
             }
         }
         else if (len > 0)
         {
-            word = NEW(Word);
-            string[len] = '\0';
-            word->string = strdup(string);
-            list_insert_last(wordlist, word);
+            append_word(string, len, wordlist);
             len = 0;
         }
+    }
+
+    if (len > 0) {
+        append_word(string, len, wordlist);
     }
 }
 /**********************************************************************/
