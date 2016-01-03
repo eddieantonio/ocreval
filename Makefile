@@ -18,7 +18,7 @@ all: $(TOOLS)
 $(TOOLS): $(LIB)
 	$(MAKE) -C $@
 
-$(LIB):
+$(LIB): Modules/word_break_property.h
 	$(MAKE) -C $@
 
 install: install-bin install-man
@@ -47,6 +47,10 @@ test: $(LIB)
 # $ gem install rerun
 watch:
 	rerun --clear --exit --pattern '**/*.{c,h}' -- make test
+
+# Generate the include file, required by libisri.a
+Modules/word_break_property.h: Supplement/generate_word_break.py Supplement/WordBreakProperty.txt.gz
+	./$< > $@
 
 .PHONY: all clean clean-lib clean-execs install install-bin install-bin
 .PHONY: test watch
