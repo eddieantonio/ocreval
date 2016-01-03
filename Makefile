@@ -41,7 +41,7 @@ clean-execs:
 
 TEST_ARGS =
 test: $(LIB)
-	$(MAKE) -C tests
+	$(MAKE) -C Tests
 
 # Uses https://github.com/alexch/rerun
 # $ gem install rerun
