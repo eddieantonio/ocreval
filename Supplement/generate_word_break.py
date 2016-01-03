@@ -94,7 +94,7 @@ def parse_lines(word_break_file):
             yield contents
 
 def to_c_header(values):
-    category_names = frozenset(category for _, category in values)
+    category_names = ['Other'] + list(set([category for _, category in values]))
     values.sort(key=lambda c: c[0][0])
 
     yield PROLOGUE
@@ -106,7 +106,9 @@ def to_c_header(values):
     yield generate_table(values)
 
 def enum_name(name):
-    return 'WB_' + name
+    #return 'WB_' + name
+    # I don't think the prefix is necessary...
+    return name
 
 def generate_enum(name, categories):
     str_values = ',\n    '.join(enum_name(category) for category in categories)
