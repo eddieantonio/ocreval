@@ -18,7 +18,6 @@ static Wordlist *wordlist = &wordlist_;
 #define nineth  first->next->next->next->next->next->next->next->next
 
 
-/* TODO: test extracting a single word */
 TEST find_words_segments_a_single_ascii_word() {
     cstring_to_text(text, "C11");
     find_words(wordlist, text);
@@ -28,10 +27,24 @@ TEST find_words_segments_a_single_ascii_word() {
     PASS();
 }
 
+
 /* TODO: test extracting no words */
 /* TODO: test extracting no haida */
 /* TODO: text extracting numerals */
 /* TODO: test word is normalized */
+TEST find_words_returns_nfc() {
+    char pho_nfc[] = { 'p', 'h', 0xE1, 0xBB, 0x9F, 0 };
+    /* With two combining characters. */
+    cstring_to_text(text, (char []) { 'p', 'h', 'o',
+                                      0xCC, 0x9B, // ◌̛
+                                      0xCC, 0x89, // ◌̉
+                                      0 });
+    find_words(wordlist, text);
+
+    ASSERT_EQ_FMT(1, wordlist->count, "%d");
+    ASSERT_STR_EQ(pho_nfc, wordlist->first->string);
+    PASS();
+}
 
 /* Exercises ASCII characters. */
 TEST find_words_segments_english_with_punctuation() {
@@ -120,6 +133,7 @@ SUITE(find_words_suite) {
     SET_TEARDOWN(teardown_find_words, NULL);
 
     RUN_TEST(find_words_segments_a_single_ascii_word);
+    RUN_TEST(find_words_returns_nfc);
 
     /* Older tests. May still be useful... */
     /*RUN_TEST(find_words_segments_english_with_punctuation);*/

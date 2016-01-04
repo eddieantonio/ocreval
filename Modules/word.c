@@ -131,12 +131,15 @@ static void append_word(wordlist, start, end)
     Word *word;
     Char *after = end->next;
     size_t len = find_utf8_length(start, after);
+    size_t result;
     char *buffer = malloc(len + 1);
     copy_into_buffer(buffer, start, after);
 
     word = NEW(Word);
-    word->string = buffer;
+    /* Convert the null-terminated string to NFC. */
+    word->string = (char *) utf8proc_NFC((const utf8proc_uint8_t *) buffer);
     list_insert_last(wordlist, word);
+    free(buffer);
 }
 /**********************************************************************/
 
