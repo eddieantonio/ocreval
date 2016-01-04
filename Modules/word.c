@@ -33,16 +33,16 @@
 
 #include "word_break_property.h"
 
-typedef enum {
-    WB_START,
-} wb_state;
+/* Macros defined in http://unicode.org/reports/tr29/#Word_Boundary_Rules */
+#define AHLetter(prop)       ((prop) == ALetter || (prop) == Hebrew_Letter)
+#define MidNumLetQ(prop)     ((prop) == MidNumLet || (prop) == Single_Quote)
 
-#define AHLetter(prop) (prop == ALetter || prop == Hebrew_Letter)
-#define MidNumLetQ(prop)  (prop == MidNumLet || prop == Single_Quote)
+/* Macro used in WB4 */
+#define ExtendOrFormat(prop) ((prop) == Extend || (prop) == Format)
 
 /**********************************************************************/
 
-/* Recursive binary search for the propery. */
+/* Recursive binary search for the property. */
 static wb_property search_for_property(code_point, left, right)
     Charvalue code_point;
     size_t left, right;
@@ -66,6 +66,8 @@ static wb_property search_for_property(code_point, left, right)
 }
 /**********************************************************************/
 
+/* Returns the word break property for a Unicode code point. */
+__attribute__ ((const))
 static wb_property property(code_point)
     Charvalue code_point;
 {
@@ -74,27 +76,146 @@ static wb_property property(code_point)
 }
 /**********************************************************************/
 
+/* Returns the next character, skipping Extend and Format characters.
+ * WB4: Skip over Extend and Format characters.  */
+__attribute__ ((pure))
+static Char* skip_to_next(from)
+    Char *from;
+{
+    if (from == NULL) {
+        return NULL;
+    }
+
+    do {
+        from = from->next;
+    } while (from != NULL && ExtendOrFormat(property(from->value)));
+    return from;
+}
+
+__attribute__ ((pure))
+static Char* skip_twice(from)
+    Char *from;
+{
+    return skip_to_next(skip_to_next(from));
+}
+
+__attribute__ ((pure))
+static wb_property char_property(node)
+    const Char *node;
+{
+    if (node == NULL) {
+        return eot;
+    }
+    return property(node->value);
+}
+
 /*
+ * Returns the next Char* BEFORE the next boundary. Note that this may just
+ * be the same character as was given.
+ *
  * Implements the Unicode TR29 Word Boundary Rules:
  * http://unicode.org/reports/tr29/#Word_Boundary_Rules
  */
 static Char* find_next_boundary(start)
     Char *start;
 {
-    wb_state state = WB_START;
-    Char *current = start;
+    /* The first thing the loop does is advance, so we need a dummy "start of
+     * loop" character that does not participate in the search. */
+    Char dummy;
+    dummy.next = start;
+    Char *current = &dummy;
+    wb_property left = sot, right, lookahead, lookbehind;
 
+    /* WB1: Break at the start and end of text. */
     if (start == NULL) {
         return NULL;
     }
 
-    /* TODO:
-     *  - [ ] implement FSM
-     *  - [ ] traverse the linked list
-     */
 
+    /* Loop to find next word break. */
+
+    /* WB2: Break at the start and end of text. */
     while (current->next != NULL) {
+        /* Advance all the pointers. */
         current = current->next;
+        lookbehind = left;
+        left = char_property(current);
+        right = char_property(skip_to_next(current));
+        lookahead = char_property(skip_twice(current));
+
+        /* WB3: Do not break within CRLF. */
+        if (left == CR && right == LF) continue;
+
+        /* WB3a: Otherwise break before and after newlines */
+        if (left == Newline || left == CR || left == LF) return current;
+        /* WB3b */
+        if (right == Newline || right == CR || right == LF) return current;
+
+        /* Ignore Format and Extend characters, except when they appear at the
+         * beginning of a region of text. */
+        /* WB4: handled by skip_to_next() and skip_twice(). */
+
+        /* WB5: Do not break between most letters. */
+        if (AHLetter(left) && AHLetter(right)) continue;
+
+        /* WB6: Do not break letters across certain punctuation. */
+        if (AHLetter(left) &&
+            (right == MidLetter || MidNumLetQ(right)) && 
+            AHLetter(left)) continue;
+        /* WB7 */
+        if (AHLetter(lookbehind) &&
+            (left == MidLetter || MidNumLetQ(left)) &&
+            AHLetter(right )) continue;
+        /* WB7a */
+        if (left == Hebrew_Letter && right == Single_Quote) continue;
+        /* WB7b */
+        if (left == Hebrew_Letter &&
+            right == Double_Quote &&
+            lookahead == Hebrew_Letter) continue;
+        /* WB7b */
+        if (lookbehind == Hebrew_Letter &&
+            left == Double_Quote &&
+            right == Hebrew_Letter) continue;
+
+        /* WB8: Do not break within sequences of digits, or digits adjacent to
+         * letters (“3a”, or “A3”). */
+        if (left == Numeric && right == Numeric) continue;
+        /* WB9 */
+        if (AHLetter(left) && right == Numeric) continue;
+        /* WB10 */
+        if (left == Numeric && AHLetter(right)) continue;
+
+        /* WB11: Do not break within sequences such as “3.2” or “3,456.789” */
+        if (lookbehind == Numeric &&
+            (left == MidNum || MidNumLetQ(left)) &&
+            right == Numeric) continue;
+        /* WB12 */
+        if (left == Numeric &&
+            (right == MidNum || MidNumLetQ(right)) &&
+            lookahead == Numeric) continue;
+
+        /* WB13: Do not break between Katakana. */
+        if (left == Katakana && right == Katakana) continue;
+
+        /* WB13a: Do not break from extenders. */
+        if ((AHLetter(left) ||
+             left == Numeric ||
+             left == Katakana ||
+             left == ExtendNumLet) &&
+            right == ExtendNumLet) continue;
+        /* WB13b */
+        if (left == ExtendNumLet &&
+            (AHLetter(right) ||
+             right == Numeric ||
+             right == Katakana ||
+             right == ExtendNumLet)) continue;
+
+        /* WB13c: Do not break between regional indicator symbols. */
+        if (left == Regional_Indicator &&
+            right == Regional_Indicator) continue;
+
+        /* WB14: Otherwise, break everywhere (including around ideographs). */
+        return current;
     }
 
     return current;
@@ -102,21 +223,20 @@ static Char* find_next_boundary(start)
 /**********************************************************************/
 
 static size_t find_utf8_length(start, after)
-    Char *start, *after;
+    const Char *start, *after;
 {
-    Char *current;
-    size_t len = 0, cplen = 0;
+    const Char *current;
+    size_t len = 0, encoded_length = 0;
     utf8proc_uint8_t dummy_buffer[4];
-
 
     for (current = start; current != after; current = current->next) {
         assert(current != NULL);
         /* Do a dummy encoding of the character for the side-effect of
          * returning its length. */
-        cplen = utf8proc_encode_char(current->value, dummy_buffer);
-        assert(cplen > 0);
+        encoded_length = utf8proc_encode_char(current->value, dummy_buffer);
+        assert(encoded_length > 0);
 
-        len += cplen;
+        len += encoded_length;
     }
 
     return len;
@@ -170,16 +290,13 @@ static Boolean is_word_start(value)
         case UTF8PROC_CATEGORY_LT: /**< Letter, titlecase */
         case UTF8PROC_CATEGORY_LM: /**< Letter, modifier */
         case UTF8PROC_CATEGORY_LO: /**< Letter, other */
+        case UTF8PROC_CATEGORY_MN: /**< Mark, nonspacing */
+        case UTF8PROC_CATEGORY_MC: /**< Mark, spacing combining */
+        case UTF8PROC_CATEGORY_ME: /**< Mark, enclosing */
         case UTF8PROC_CATEGORY_ND: /**< Number, decimal digit */
         case UTF8PROC_CATEGORY_NL: /**< Number, letter */
         case UTF8PROC_CATEGORY_NO: /**< Number, other */
         case UTF8PROC_CATEGORY_PC: /**< Punctuation, connector */
-        case UTF8PROC_CATEGORY_SC: /**< Symbol, currency */
-        case UTF8PROC_CATEGORY_SK: /**< Symbol, modifier */
-        case UTF8PROC_CATEGORY_SO: /**< Symbol, other */
-        case UTF8PROC_CATEGORY_MN : /**< Mark, nonspacing */
-        case UTF8PROC_CATEGORY_MC : /**< Mark, spacing combining */
-        case UTF8PROC_CATEGORY_ME : /**< Mark, enclosing */
             /* Allow for private use characters. */
         case UTF8PROC_CATEGORY_CO: /**< Other, private use */
             return True;

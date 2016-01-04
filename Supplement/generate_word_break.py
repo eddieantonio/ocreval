@@ -49,6 +49,28 @@ static const wb_range WORD_BREAK_PROPERTY[] = {
 };
 '''.lstrip()
 
+CATEGORY_NAMES = r'''
+Other
+CR
+LF
+Newline
+Extend
+Regional_Indicator
+Format
+Katakana
+Hebrew_Letter
+ALetter
+Single_Quote
+Double_Quote
+MidNumLet
+MidLetter
+MidNum
+Numeric
+ExtendNumLet
+sot
+eot
+'''.strip().split()
+
 def open_word_break_file():
     filename = 'WordBreakProperty.txt.gz'
     path = os.path.join(os.path.dirname(__file__), filename)
@@ -94,12 +116,12 @@ def parse_lines(word_break_file):
             yield contents
 
 def to_c_header(values):
-    category_names = ['Other'] + list(set([category for _, category in values]))
+    assert set(category for _, category in values).issubset(set(CATEGORY_NAMES))
     values.sort(key=lambda c: c[0][0])
 
     yield PROLOGUE
     yield '\n'
-    yield generate_enum('wb_property', category_names)
+    yield generate_enum('wb_property', CATEGORY_NAMES)
     yield '\n'
     yield STRUCT_DEF
     yield '\n'

@@ -31,8 +31,8 @@ TEST find_words_returns_nfc() {
     char pho_nfc[] = { 'p', 'h', 0xE1, 0xBB, 0x9F, 0 };
     /* With two combining characters. */
     cstring_to_text(text, (char []) { 'p', 'h', 'o',
-                                      0xCC, 0x9B, // ◌̛
-                                      0xCC, 0x89, // ◌̉
+                                      0xCC, 0x9B, /* ◌̛ */
+                                      0xCC, 0x89, /* ◌̉ */
                                       0 });
     find_words(wordlist, text);
 
@@ -65,7 +65,7 @@ TEST find_words_segments_english_with_punctuation() {
     ASSERT_STR_EQ("quick", wordlist->second->string);
     ASSERT_STR_EQ("brown", wordlist->third->string);
     ASSERT_STR_EQ("fox",   wordlist->fourth->string);
-    ASSERT_STR_EQ("can't", wordlist->fifth->string);
+    ASSERT_STR_EQ("can’t", wordlist->fifth->string);
     ASSERT_STR_EQ("jump",  wordlist->sixth->string);
     ASSERT_STR_EQ("32.3",  wordlist->seventh->string);
     ASSERT_STR_EQ("right",  wordlist->nineth->string);
@@ -125,6 +125,10 @@ TEST find_words_segments_japanese() {
 #undef third
 #undef fourth
 #undef fifth
+#undef sixth
+#undef seventh
+#undef eighth
+#undef nineth
 
 static void setup_find_words(void *unused) {
     initialize_texts((Text*[]) {text, NULL});
@@ -143,7 +147,7 @@ SUITE(find_words_suite) {
     RUN_TEST(find_words_segments_a_single_ascii_word);
     RUN_TEST(find_words_returns_nfc);
     RUN_TEST(find_words_returns_zero_when_not_given_words);
-    /*RUN_TEST(find_words_segments_english_with_punctuation);*/
+    RUN_TEST(find_words_segments_english_with_punctuation);
 
     /* Older tests. May still be useful... */
     /*RUN_TEST(find_words_segments_spanish_words);*/

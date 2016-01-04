@@ -3,22 +3,24 @@
 
 typedef enum {
     Other,
+    CR,
     LF,
-    MidNum,
-    Double_Quote,
-    MidLetter,
+    Newline,
     Extend,
+    Regional_Indicator,
     Format,
+    Katakana,
     Hebrew_Letter,
     ALetter,
-    Newline,
-    Numeric,
-    Regional_Indicator,
+    Single_Quote,
+    Double_Quote,
     MidNumLet,
+    MidLetter,
+    MidNum,
+    Numeric,
     ExtendNumLet,
-    CR,
-    Katakana,
-    Single_Quote
+    sot,
+    eot
 } wb_property;
 
 typedef struct {
