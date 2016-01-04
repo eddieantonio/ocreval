@@ -116,7 +116,7 @@ TEST find_words_segments_japanese() {
      * instead of four, however, that would involve incorporating a Japanese
      * dictionary in order to look-up Kanji words... */
     ASSERT_STR_EQ("伝", wordlist->third->string);
-    ASSERT_STR_EQ("説", wordlist->third->string);
+    ASSERT_STR_EQ("説", wordlist->fourth->string);
 
     PASS();
 }
@@ -148,9 +148,7 @@ SUITE(find_words_suite) {
     RUN_TEST(find_words_returns_nfc);
     RUN_TEST(find_words_returns_zero_when_not_given_words);
     RUN_TEST(find_words_segments_english_with_punctuation);
-
-    /* Older tests. May still be useful... */
-    /*RUN_TEST(find_words_segments_spanish_words);*/
-    /*RUN_TEST(find_words_segments_numerals);*/
-    /*RUN_TEST(find_words_segments_japanese);*/
+    RUN_TEST(find_words_segments_spanish_words);
+    RUN_TEST(find_words_segments_numerals);
+    RUN_TEST(find_words_segments_japanese);
 }

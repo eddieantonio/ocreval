@@ -76,6 +76,16 @@ static wb_property property(code_point)
 }
 /**********************************************************************/
 
+__attribute__ ((pure))
+static wb_property char_property(node)
+    const Char *node;
+{
+    if (node == NULL) {
+        return eot;
+    }
+    return property(node->value);
+}
+
 /* Returns the next character, skipping Extend and Format characters.
  * WB4: Skip over Extend and Format characters.  */
 __attribute__ ((pure))
@@ -88,7 +98,7 @@ static Char* skip_to_next(from)
 
     do {
         from = from->next;
-    } while (from != NULL && ExtendOrFormat(property(from->value)));
+    } while (from != NULL && ExtendOrFormat(char_property(from)));
     return from;
 }
 
@@ -99,14 +109,21 @@ static Char* skip_twice(from)
     return skip_to_next(skip_to_next(from));
 }
 
-__attribute__ ((pure))
-static wb_property char_property(node)
-    const Char *node;
+/* Returns the last code point of a grapheme, including extend and format
+ * characters.  */
+static Char* skip_to_end_of_extend(from)
+    Char *from;
 {
-    if (node == NULL) {
-        return eot;
+    if (from == NULL) {
+        return NULL;
     }
-    return property(node->value);
+
+    /* Skip until the LAST extend or format character. */
+    while (from->next != NULL && ExtendOrFormat(char_property(from->next))) {
+        from = from->next;
+    }
+
+    return from;
 }
 
 /*
@@ -131,13 +148,12 @@ static Char* find_next_boundary(start)
         return NULL;
     }
 
-
-    /* Loop to find next word break. */
+    /* Loop to find the next word break. */
 
     /* WB2: Break at the start and end of text. */
     while (current->next != NULL) {
         /* Advance all the pointers. */
-        current = current->next;
+        current = skip_to_next(current);
         lookbehind = left;
         left = char_property(current);
         right = char_property(skip_to_next(current));
@@ -147,9 +163,9 @@ static Char* find_next_boundary(start)
         if (left == CR && right == LF) continue;
 
         /* WB3a: Otherwise break before and after newlines */
-        if (left == Newline || left == CR || left == LF) return current;
+        if (left == Newline || left == CR || left == LF) break;
         /* WB3b */
-        if (right == Newline || right == CR || right == LF) return current;
+        if (right == Newline || right == CR || right == LF) break;
 
         /* Ignore Format and Extend characters, except when they appear at the
          * beginning of a region of text. */
@@ -160,7 +176,7 @@ static Char* find_next_boundary(start)
 
         /* WB6: Do not break letters across certain punctuation. */
         if (AHLetter(left) &&
-            (right == MidLetter || MidNumLetQ(right)) && 
+            (right == MidLetter || MidNumLetQ(right)) &&
             AHLetter(left)) continue;
         /* WB7 */
         if (AHLetter(lookbehind) &&
@@ -215,10 +231,10 @@ static Char* find_next_boundary(start)
             right == Regional_Indicator) continue;
 
         /* WB14: Otherwise, break everywhere (including around ideographs). */
-        return current;
+        break;
     }
 
-    return current;
+    return skip_to_end_of_extend(current);
 }
 /**********************************************************************/
 
