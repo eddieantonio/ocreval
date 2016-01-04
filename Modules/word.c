@@ -26,6 +26,7 @@
  **********************************************************************/
 
 #include <assert.h>
+#include <string.h>
 
 #include <utf8proc.h>
 #include "word.h"
@@ -73,7 +74,73 @@ static wb_property property(code_point)
 }
 /**********************************************************************/
 
-static Boolean is_wordchar(value)
+/*
+ * Implements the Unicode TR29 Word Boundary Rules:
+ * http://unicode.org/reports/tr29/#Word_Boundary_Rules
+ */
+static Char* find_next_boundary(start)
+    Char *start;
+{
+    return NULL;
+}
+/**********************************************************************/
+
+static size_t find_utf8_length(start, after)
+    Char *start, *after;
+{
+    Char *current;
+    size_t len = 0, cplen = 0;
+    utf8proc_uint8_t dummy_buffer[4];
+
+
+    for (current = start; current != after; current = current->next) {
+        assert(current != NULL);
+        /* Do a dummy encoding of the character for the side-effect of
+         * returning its length. */
+        cplen = utf8proc_encode_char(current->value, dummy_buffer);
+        assert(cplen > 0);
+
+        len += cplen;
+    }
+
+    return len;
+}
+
+static void copy_into_buffer(buffer, start, after)
+    char *buffer;
+    Char *start, *after;
+{
+    Char *current;
+    size_t i = 0;
+
+    for (current = start; current != after; current = current->next) {
+        assert(current != NULL);
+        i += utf8proc_encode_char(current->value, (utf8proc_uint8_t*) &buffer[i]);
+    }
+
+    /* Null-terminate the buffer. */
+    buffer[i] = '\0';
+}
+/**********************************************************************/
+
+
+static void append_word(wordlist, start, end)
+    Char *start, *end;
+    Wordlist *wordlist;
+{
+    Word *word;
+    Char *after = end->next;
+    size_t len = find_utf8_length(start, after);
+    char *buffer = malloc(len + 1);
+    copy_into_buffer(buffer, start, after);
+
+    word = NEW(Word);
+    word->string = buffer;
+    list_insert_last(wordlist, word);
+}
+/**********************************************************************/
+
+static Boolean is_word_start(value)
     Charvalue value;
 {
     const utf8proc_property_t * props = utf8proc_get_property(value);
@@ -103,113 +170,6 @@ static Boolean is_wordchar(value)
 }
 /**********************************************************************/
 
-/*
- * Implements the Unicode TR29 Word Boundary Rules:
- * http://unicode.org/reports/tr29/#Word_Boundary_Rules
- */
-static Boolean forms_boundary(left_char, right_char)
-    Char *left_char, *right_char;
-{
-    /* Break at the start and end of text. */
-    /* WB1, WB2 */
-    if (left_char == START_OF_TEXT || right_char == END_OF_TEXT) {
-        return True;
-    }
-
-    assert(right_char != START_OF_TEXT);
-    assert(left_char != END_OF_TEXT);
-
-    wb_property left = property(left_char->value),
-                right = property(right_char->value);
-
-    /* Do not break within CRLF. */
-    /* WB3 */
-    if (left == CR && right == LF) return False;
-    /* Otherwise break before and after Newlines (including CR and LF) */
-    /* WB3a */
-    if (left == Newline || left == LF || left == CR) return True;
-    /* WB3b */
-    if (right == Newline || right == LF || right == CR) return True;
-
-    /* Ignore Format and Extend characters, except when they appear at the
-     * beginning of a region of text. */
-    /* WB4: TODO: not implemented! */
-
-    /* Do not break between most letters. */
-    /* WB5 */
-    if (AHLetter(left) && AHLetter(right)) return false;
-
-    /* Do not break letters across certain punctuation. */
-    /* WB6: TODO: need a character look-ahead... */
-    if (AHLetter(left) && (right == MidLetter ||
-                           MidNumLetQ(right))) return false;
-    /* WB7 */
-    if ((left == MidLetter ||
-         MidNumLetQ(left)) && AHLetter(right)) return false;
-    /* WB7 */
-    if (left == Hebrew_Letter && right == Single_Quote) return false;
-    /* WB7b: TODO: not implemented */
-    if (left == Hebrew_Letter && right == Single_Quote) return false;
-    /* WB7c: TODO: not implemented */
-    if (left == Double_Quote && right == Hebrew_Letter) return false;
-
-    /* Do not break within sequences of digits, or digits adjacent to letters
-     * (“3a”, or “A3”). */
-    /* WB8 */
-    if (left == Numeric && right == Numeric) return false;
-    /* WB9 */
-    if (AHLetter(left) && right == Numeric) return false;
-    /* WB10 */
-    if (left == Numeric && AHLetter(right)) return false;
-
-    /* Do not break within sequences, such as “3.2” or “3,456.789”. */
-    /* WB11: TODO: need look-behind. */
-    if ((left == MidNum ||
-         MidNumLetQ(left)) && right == Numeric) return false;
-    /* WB12: TODO: need look-ahead. */
-    if (left == Numeric && (right == MidNum ||
-                            MidNumLetQ(right))) return false;
-
-    /* Do not break between Katakana. */
-    /* WB13 */
-    if (left == Katakana || right == Katakana) return false;
-
-    /* Do not break from extenders. */
-    /* WB13a */
-    if ((AHLetter(left) ||
-         left == Numeric ||
-         left == Katakana ||
-         left == ExtendNumLet) && right == ExtendNumLet) return false;
-    /* WB13b */
-    if (left == ExtendNumLet && (AHLetter(right) ||
-                                 right == Numeric ||
-                                 right == Katakana)) return false;
-
-    /* Do not break between regional indicator symbols. */
-    /* WB13c */
-    if (left == Regional_Indicator && right == Regional_Indicator) return false;
-
-    /* Otherwise, break everywhere (including around ideographs). */
-    /* WB14 */
-    return true;
-}
-/**********************************************************************/
-
-static void append_word(buffer, len, wordlist)
-    char* buffer;
-    long len;
-    Wordlist *wordlist;
-{
-    Word *word;
-
-    word = NEW(Word);
-    /* Null-terminate the buffer. */
-    buffer[len] = '\0';
-    word->string = strdup(buffer);
-    list_insert_last(wordlist, word);
-}
-/**********************************************************************/
-
 /* TODO:
  * Use find_next_boundary() instead.
  *  - [ ] implement FSM
@@ -222,43 +182,14 @@ void find_words(wordlist, text)
     Wordlist *wordlist;
     Text *text;
 {
-    char string[MAX_WORDLENGTH + 1];
-    long len = 0;
-    Char *last = START_OF_TEXT;
-    Char *current;
-    Boolean in_word = false;
-    Boolean has_boundary = false;
+    Char *current, *first = text->first;
+    current = first;
 
-    for (current = text->first; current != NULL; last = current, current = current->next)
-    {
-        has_boundary = forms_boundary(last, current);
-
-        if (!in_word && has_boundary) {
-            if (is_wordchar(current->value)) {
-                in_word = true;
-            }
-        } else if (has_boundary /* && in word */) {
-            in_word = false;
-        }
-
-        if (in_word)
-        {
-            if (len + 3 < MAX_WORDLENGTH) {
-                len += encode_or_die(current->value, &string[len]);
-            }
-        }
-        else if (len > 0)
-        {
-            append_word(string, len, wordlist);
-            len = 0;
-        }
+    while (current->next != NULL) {
+        current = current->next;
     }
 
-    if (len > 0) {
-        append_word(string, len, wordlist);
-    }
-
-    fflush(stderr);
+    append_word(wordlist, first, current);
 }
 /**********************************************************************/
 

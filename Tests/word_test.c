@@ -17,8 +17,24 @@ static Wordlist *wordlist = &wordlist_;
 #define eighth  first->next->next->next->next->next->next->next
 #define nineth  first->next->next->next->next->next->next->next->next
 
+
+/* TODO: test extracting a single word */
+TEST find_words_segments_a_single_ascii_word() {
+    cstring_to_text(text, "C11");
+    find_words(wordlist, text);
+
+    ASSERT_EQ_FMT(1, wordlist->count, "%d");
+    ASSERT_STR_EQ("C11", wordlist->first->string);
+    PASS();
+}
+
+/* TODO: test extracting no words */
+/* TODO: test extracting no haida */
+/* TODO: text extracting numerals */
+/* TODO: test word is normalized */
+
 /* Exercises ASCII characters. */
-TEST find_words_segments_english_words() {
+TEST find_words_segments_english_with_punctuation() {
     /* From: http://unicode.org/reports/tr29/#Word_Boundaries */
     cstring_to_text(text, "The quick (\"brown\") fox can’t jump 32.3 feet, "
                           "right?");
@@ -103,8 +119,11 @@ SUITE(find_words_suite) {
     SET_SETUP(setup_find_words, NULL);
     SET_TEARDOWN(teardown_find_words, NULL);
 
-    //RUN_TEST(find_words_segments_english_words);
-    RUN_TEST(find_words_segments_spanish_words);
-    RUN_TEST(find_words_segments_numerals);
-    //RUN_TEST(find_words_segments_japanese);
+    RUN_TEST(find_words_segments_a_single_ascii_word);
+
+    /* Older tests. May still be useful... */
+    /*RUN_TEST(find_words_segments_english_with_punctuation);*/
+    /*RUN_TEST(find_words_segments_spanish_words);*/
+    /*RUN_TEST(find_words_segments_numerals);*/
+    /*RUN_TEST(find_words_segments_japanese);*/
 }
