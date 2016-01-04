@@ -33,9 +33,9 @@
 
 #include "word_break_property.h"
 
-/* Special constants for start and end of text. */
-#define START_OF_TEXT ((Char *) 0x01)
-#define END_OF_TEXT   (NULL)
+typedef enum {
+    WB_START,
+} wb_state;
 
 #define AHLetter(prop) (prop == ALetter || prop == Hebrew_Letter)
 #define MidNumLetQ(prop)  (prop == MidNumLet || prop == Single_Quote)
@@ -81,7 +81,23 @@ static wb_property property(code_point)
 static Char* find_next_boundary(start)
     Char *start;
 {
-    return NULL;
+    wb_state state = WB_START;
+    Char *current = start;
+
+    if (start == NULL) {
+        return NULL;
+    }
+
+    /* TODO:
+     *  - [ ] implement FSM
+     *  - [ ] traverse the linked list
+     */
+
+    while (current->next != NULL) {
+        current = current->next;
+    }
+
+    return current;
 }
 /**********************************************************************/
 
@@ -173,26 +189,22 @@ static Boolean is_word_start(value)
 }
 /**********************************************************************/
 
-/* TODO:
- * Use find_next_boundary() instead.
- *  - [ ] implement FSM
- *  - [ ] traverse the linked list
- *  - [ ] convert the linked list from one node to another into a UTF-8 string
- *      - [ ] Write tests for this
- *      - [ ] Convert to NFC for comparison purposes.
- */
 void find_words(wordlist, text)
     Wordlist *wordlist;
     Text *text;
 {
-    Char *current, *first = text->first;
-    current = first;
+    /* First and last characters of a segment. */
+    Char *first = text->first, *last;
 
-    while (current->next != NULL) {
-        current = current->next;
+    while ((last = find_next_boundary(first)) != NULL) {
+        /* Only append this segment if it starts with a "word-y" character. */
+        if (is_word_start(first->value)) {
+            append_word(wordlist, first, last);
+        }
+
+        /* Advance to the next segment. */
+        first = last->next;
     }
-
-    append_word(wordlist, first, current);
 }
 /**********************************************************************/
 

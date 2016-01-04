@@ -27,11 +27,6 @@ TEST find_words_segments_a_single_ascii_word() {
     PASS();
 }
 
-
-/* TODO: test extracting no words */
-/* TODO: test extracting no haida */
-/* TODO: text extracting numerals */
-/* TODO: test word is normalized */
 TEST find_words_returns_nfc() {
     char pho_nfc[] = { 'p', 'h', 0xE1, 0xBB, 0x9F, 0 };
     /* With two combining characters. */
@@ -45,6 +40,19 @@ TEST find_words_returns_nfc() {
     ASSERT_STR_EQ(pho_nfc, wordlist->first->string);
     PASS();
 }
+
+TEST find_words_returns_zero_when_not_given_words() {
+    /* With two combining characters. */
+    cstring_to_text(text, "#$#@! #@!\n#@!!!$#");
+    find_words(wordlist, text);
+
+    ASSERT_EQ_FMT(0, wordlist->count, "%d");
+    PASS();
+}
+
+/* TODO: test extracting no words */
+/* TODO: test extracting haida */
+/* TODO: text extracting numerals */
 
 /* Exercises ASCII characters. */
 TEST find_words_segments_english_with_punctuation() {
@@ -134,9 +142,10 @@ SUITE(find_words_suite) {
 
     RUN_TEST(find_words_segments_a_single_ascii_word);
     RUN_TEST(find_words_returns_nfc);
+    RUN_TEST(find_words_returns_zero_when_not_given_words);
+    /*RUN_TEST(find_words_segments_english_with_punctuation);*/
 
     /* Older tests. May still be useful... */
-    /*RUN_TEST(find_words_segments_english_with_punctuation);*/
     /*RUN_TEST(find_words_segments_spanish_words);*/
     /*RUN_TEST(find_words_segments_numerals);*/
     /*RUN_TEST(find_words_segments_japanese);*/
