@@ -50,9 +50,6 @@ TEST find_words_returns_zero_when_not_given_words() {
     PASS();
 }
 
-/* TODO: test extracting no words */
-/* TODO: test extracting haida */
-/* TODO: text extracting numerals */
 
 /* Exercises ASCII characters. */
 TEST find_words_segments_english_with_punctuation() {
@@ -121,6 +118,24 @@ TEST find_words_segments_japanese() {
     PASS();
 }
 
+TEST find_words_segments_haida_words() {
+    cstring_to_text(text, "Wᴀˊstᴀ haˊoîsîn ᵋāl ʟēˊłas ʟ̣ū haoîsîˊn\n"
+                          "l’ sᵋaiˊᵋänᴀn.");
+    find_words(wordlist, text);
+
+    ASSERT_EQ_FMT(8, wordlist->count, "%d");
+    ASSERT_STR_EQ("Wᴀˊstᴀ",     wordlist->first->string);
+    ASSERT_STR_EQ("haˊoîsîn",   wordlist->second->string);
+    ASSERT_STR_EQ("ᵋāl",        wordlist->third->string);
+    ASSERT_STR_EQ("ʟēˊłas",     wordlist->fourth->string);
+    ASSERT_STR_EQ("ʟ̣ū",         wordlist->fifth->string);
+    ASSERT_STR_EQ("haoîsîˊn",   wordlist->sixth->string);
+    ASSERT_STR_EQ("sᵋaiˊᵋänᴀn", wordlist->eighth->string);
+
+    PASS();
+}
+
+
 #undef second
 #undef third
 #undef fourth
@@ -149,6 +164,7 @@ SUITE(find_words_suite) {
     RUN_TEST(find_words_returns_zero_when_not_given_words);
     RUN_TEST(find_words_segments_english_with_punctuation);
     RUN_TEST(find_words_segments_spanish_words);
+    RUN_TEST(find_words_segments_haida_words);
     RUN_TEST(find_words_segments_numerals);
     RUN_TEST(find_words_segments_japanese);
 }

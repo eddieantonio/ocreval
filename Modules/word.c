@@ -177,7 +177,7 @@ static Char* find_next_boundary(start)
         /* WB6: Do not break letters across certain punctuation. */
         if (AHLetter(left) &&
             (right == MidLetter || MidNumLetQ(right)) &&
-            AHLetter(left)) continue;
+            AHLetter(lookahead)) continue;
         /* WB7 */
         if (AHLetter(lookbehind) &&
             (left == MidLetter || MidNumLetQ(left)) &&
