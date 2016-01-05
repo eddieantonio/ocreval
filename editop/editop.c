@@ -170,8 +170,8 @@ Candidate candidate[];
 	    reduction++;
 	if (candidate[i].for_deletion)
 	    reduction++;
-	if (reduction > move_reduction || reduction == move_reduction &&
-	candidate[i].sync->substr->length < move_length)
+	if (reduction > move_reduction || (reduction == move_reduction &&
+	candidate[i].sync->substr->length < move_length))
 	{
 	    move_i = i;
 	    move_length = candidate[i].sync->substr->length;

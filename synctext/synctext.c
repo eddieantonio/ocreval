@@ -152,7 +152,7 @@ char *argv[];
     int i;
     Synclist synclist1, synclist2;
     initialize(&argc, argv, usage, option);
-    if (argc < 2 || transpose && argc > 2)
+    if (argc < 2 || (transpose && argc > 2))
 	error("invalid number of text files");
     text = NEW_ARRAY(argc, Text);
     for (i = 0; i < argc; i++)

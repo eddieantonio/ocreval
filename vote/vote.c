@@ -118,11 +118,12 @@ char *argv[];
     if (wfraction &&
     !valid_fraction(wfraction, &suspect_weight, &unmarked_weight))
 	error_string("invalid weight", wfraction);
-    if (sfraction)
+    if (sfraction) {
 	if (valid_fraction(sfraction, &m, &n))
 	    suspect_threshold = actual_voters * unmarked_weight * m / n;
 	else
 	    error_string("invalid threshold", sfraction);
+    }
 }
 /**********************************************************************/
 
