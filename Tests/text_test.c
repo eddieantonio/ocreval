@@ -36,6 +36,15 @@ TEST cstring_to_text_should_handle_astral_code_points() {
     PASS();
 }
 
+TEST char_to_string_converts_space() {
+    char buffer[STRING_SIZE];
+
+    char_to_string(False, ' ', buffer, False);
+    ASSERT_STR_EQ(" ", buffer);
+
+    PASS();
+}
+
 TEST char_to_string_converts_printable_ascii() {
     char buffer[STRING_SIZE];
 
@@ -102,6 +111,7 @@ SUITE(cstring_to_text_suite) {
 
 SUITE(char_to_string_suite) {
     RUN_TEST(char_to_string_converts_printable_ascii);
+    RUN_TEST(char_to_string_converts_space);
     RUN_TEST(char_to_string_converts_non_printable_ascii);
     RUN_TEST(char_to_string_converts_printable_bmp);
     RUN_TEST(char_to_string_converts_astral_code_points);

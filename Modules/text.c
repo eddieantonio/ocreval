@@ -257,6 +257,11 @@ static Boolean is_graphic_character(character)
 {
 	const utf8proc_property_t * props = utf8proc_get_property(character);
 
+	/* Special case the space character. */
+	if (character == ' ') {
+	    return true;
+	}
+
 	switch (props->category) {
 		case UTF8PROC_CATEGORY_LU: /**< Letter, uppercase */
 		case UTF8PROC_CATEGORY_LL: /**< Letter, lowercase */
