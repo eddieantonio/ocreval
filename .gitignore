@@ -1,5 +1,6 @@
+# Objects and dependencies.
 *.o
-*.a
 *.d
+# Debugging
 *.dSYM/
 core

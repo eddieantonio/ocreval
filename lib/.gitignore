@@ -1,0 +1,5 @@
+# Ensure that this directory exists in git
+# but ignore every file that it will be used for.
+*.a
+*.so
+*.so.*

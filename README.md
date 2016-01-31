@@ -20,8 +20,6 @@ Using [Homebrew][brew]:
 Building
 ========
 
-Each subdirectory contains the source for one program, a Unix man
-page, and a Makefile.  Most programs depend on a library in Modules/
 To build the library and all of the programs, simply type `make`.
 
 ## Dependencies
@@ -61,11 +59,19 @@ The manual way:
 
     make
 
-## Installing
+## Installing globally
 
 Install to `/usr/local/`:
 
     make install
+
+## Installing "locally"
+
+This will not copy any files at all, but instead create the appropriate
+shell commands to add all executables, man pages, and libraries to
+the correct path (replace `~/.bashrc` with your start-up file):
+
+    make exports >> ~/.bashrc
 
 # Porting Credits
 
