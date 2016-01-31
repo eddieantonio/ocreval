@@ -1,4 +1,4 @@
-include ../use_lib.mk
+include ../use-libisri-internal.mk
 
 test: run
 	./$< $(TEST_ARGS)

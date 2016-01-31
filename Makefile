@@ -1,58 +1,57 @@
-include common.mk
+# Copyright 2016 Eddie Antonio Santos <easantos@ualberta.ca>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
+# Install prefix, if needed.
+PREFIX = /usr/local
+
+# List of all the tools (executables + manual pages)
 TOOLS = accci accdist accsum accuracy editop editopcost editopsum \
 		groupacc ngram nonstopacc synctext vote wordacc wordaccci \
 		wordaccdist wordaccsum wordfreq
 
-PREFIX = /usr/local
-BINDIR = $(PREFIX)/bin
-MANDIR = $(PREFIX)/share/man/man1
+# Name: libisri, or -lisri
+NAME = isri
+MAJOR_VERSION = 6
+MINOR_VERSION = 1
 
-EXECUTABLES = $(foreach D,$(TOOLS),$D/$D)
-MANPAGES = $(EXECUTABLES:=.1)
-LIB = Modules
+# All the executables go in bin/
+EXECUTABLES = $(addprefix bin/,$(TOOLS))
+# All manual pages go in share/man/man1
+MANPAGES = $(foreach TOOL,$(TOOLS),share/man/man1/$(TOOL))
 
-all: $(TOOLS)
+include use-libisri-internal.mk
 
-# Create every subexecutable.
-$(TOOLS): $(LIB)
-	$(MAKE) -C $@
+ifeq ($(shell uname),Darwin)
+LIBRARY.so = $(LIBRARY.a:.a=.dylib)
+else
+LIBRARY.so = $(LIBRARY.a:.a=.so.$(MAJOR_VERSION).$(MINOR_VERSION))
+endif
 
-$(LIB): Modules/word_break_property.h
-	$(MAKE) -C $@
+# Allows for proper compilation and linking settings for libisri
 
-install: install-bin install-man
+all: $(EXECUTABLES)
 
-install-bin: $(TOOLS)
-	mkdir -p $(BINDIR)
-	cp $(EXECUTABLES) $(BINDIR)/
+###
 
-install-man: $(TOOLS)
-	mkdir -p $(MANDIR)
-	cp $(MANPAGES) $(MANDIR)/
+# Rules for building executables; they are statically linked with the library.
+bin/%: src/%.c $(LIBRARY.a)
+	$(LINK.c) -o $@ $< $(LDLIBS)
 
-clean: clean-lib clean-execs
+EXECUTABLE_SOURCES := $(foreach TOOL,$(TOOLS),src/$(TOOL).c)
+MODULES := $(filter-out $(EXECUTABLE_SOURCES),$(wildcard src/*.c))
 
-clean-lib:
-	$(MAKE) -C Modules clean
+$(LIBRARY.a): $(MODULES:.c=.o)
+	$(AR) $(ARFLAGS) -s $@ $^
 
-clean-execs:
-	$(RM) $(EXECUTABLES)
-
-TEST_ARGS =
-test: $(LIB)
-	$(MAKE) -C Tests
-
-# Uses https://github.com/alexch/rerun
-# $ gem install rerun
-watch:
-	rerun --clear --exit --pattern '**/*.{c,h}' -- make test
-
-# Generate the include file, required by libisri.a
-Modules/word_break_property.h: Supplement/generate_word_break.py Supplement/WordBreakProperty.txt.gz
-	./$< > $@
-
-.PHONY: all clean clean-lib clean-execs install install-bin install-bin
-.PHONY: test watch
-# Always remake subdirs.
-.PHONY: $(LIB) $(MODULES)
+.PHONY: all
