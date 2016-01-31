@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This file is inspired by [Keep a `CHANGELOG`](http://keepachangelog.com/).
 
 ## [Unreleased]
+### Added
+- `Make exports` which outputs shell `export` commands (to avoid global installation)
+
 ### Changed
 - More conventional directory layout (#4)
 
