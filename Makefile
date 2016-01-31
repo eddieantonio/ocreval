@@ -119,5 +119,6 @@ $(LIBRARY.a): $(MODULES)
 	$(AR) $(ARFLAGS) -s $@ $^
 
 # Special case: Generate this include file, required by libisri.a
-src/word_break_property.h: libexec/generate_word_break.py libexec/WordBreakProperty.txt.gz
+$(TOP)src/word_break_property.h src/word_break_property.h: \
+		libexec/generate_word_break.py libexec/WordBreakProperty.txt.gz
 	./$< > $@
