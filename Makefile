@@ -12,8 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Install prefix, if needed.
+# Install prefix, if installing globally.
+# See also: `exports` target
 PREFIX = /usr/local
+BINDIR = $(PREFIX)/bin
+MANDIR = $(PREFIX)/share/man/man1
 
 # List of all the tools (executables + manual pages)
 TOOLS = accci accdist accsum accuracy editop editopcost editopsum \
@@ -28,17 +31,16 @@ MINOR_VERSION = 1
 # All the executables go in bin/
 EXECUTABLES = $(addprefix bin/,$(TOOLS))
 # All manual pages go in share/man/man1
-MANPAGES = $(foreach TOOL,$(TOOLS),share/man/man1/$(TOOL))
+MANPAGES = $(foreach TOOL,$(TOOLS),share/man/man1/$(TOOL).1)
 
 include use-libisri-internal.mk
 
 LIBRARY.a = lib/lib$(NAME).a
-ifeq ($(shell uname),Darwin)
+ifeq ($(shell uname -s),Darwin)
 LIBRARY.so = $(LIBRARY.a:.a=.dylib)
 else
 LIBRARY.so = $(LIBRARY.a:.a=.so.$(MAJOR_VERSION).$(MINOR_VERSION))
 endif
-
 
 ################################################################################
 
@@ -48,13 +50,24 @@ all: $(EXECUTABLES)
 
 install: install-bin install-man
 
-install-bin: $(TOOLS)
+install-bin: $(EXECUTABLES)
 	mkdir -p $(BINDIR)
 	cp $(EXECUTABLES) $(BINDIR)/
 
-install-man: $(TOOLS)
+install-man: $(MANPAGES)
 	mkdir -p $(MANDIR)
 	cp $(MANPAGES) $(MANDIR)/
+
+# Prints a bunch of exports you can source in your shell's startup file.
+exports:
+	@echo '#' ISRI Evaluation Tools
+	@echo export PATH='$(TOP)bin:$$PATH'
+	@echo export MANPATH='$(TOP)share/man:$$MANPATH'
+ifeq ($(shell uname -s),Darwin)
+	@echo export DYLD_LIBRARY_PATH='$(TOP)lib:$$DYLD_LIBRARY_PATH'
+else
+	@echo export LD_LIBRARY_PATH='$(TOP)lib:$$LD_LIBRARY_PATH'
+endif
 
 clean: clean-objs clean-execs clean-libs clean-deps clean-test
 
