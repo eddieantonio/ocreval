@@ -63,7 +63,9 @@ The manual way:
 
 Install to `/usr/local/`:
 
-    make install
+    sudo make install
+    
+Note: You will not need `sudo` on OS X if you have `brew` installed.
 
 ## Installing "locally"
 
