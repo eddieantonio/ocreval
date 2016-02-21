@@ -2,6 +2,7 @@ include ../use-libisri-internal.mk
 
 test: run
 	./$< $(TEST_ARGS)
+	./test_accuracy_large_files.py
 	
 clean:
 	$(RM) run
