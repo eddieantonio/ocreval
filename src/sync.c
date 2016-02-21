@@ -22,6 +22,8 @@
  *
  **********************************************************************/
 
+#include <stdint.h>
+
 #include "sync.h"
 
 #define MIN_STREAMS   2
@@ -29,8 +31,9 @@
 
 /* #define SHOW_FASTUKK_REDUCTION */
 
-typedef unsigned short F;
-#define MAX_F     65535
+/* Support up to 2**32 characters. */
+typedef uint_fast32_t F;
+#define MAX_F     INT_FAST32_MAX
 
 BEGIN_ITEM(Diag)
     F f;
