@@ -3,7 +3,11 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This file is inspired by [Keep a `CHANGELOG`](http://keepachangelog.com/).
 
-## [6.1.0]
+## [6.1.1] - 2016-02-22
+### Fixed
+- No longer spuriously abort if inputs are longer than 65,536 characters
+
+## [6.1.0] - 2016-01-01
 ### Added
 - `Make exports` which outputs shell `export` commands (to avoid global installation)
 
@@ -35,7 +39,8 @@ This file is inspired by [Keep a `CHANGELOG`](http://keepachangelog.com/).
 ### Fixed
 - Compiles on modern OS X and Ubuntu
 
-[Unreleased]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/compare/v6.1.0...HEAD
+[Unreleased]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/compare/v6.1.1...HEAD
+[6.1.1]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/compare/v6.1.0...v6.1.0
 [6.1.0]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/compare/v6.0.1...v6.1.0
 [6.0.1]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/compare/v6.0.0...v6.0.1
 [6.0.0]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/compare/v5.1.3...v6.0.0
