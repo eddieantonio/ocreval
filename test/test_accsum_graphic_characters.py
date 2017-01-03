@@ -6,6 +6,7 @@ Tests accsum on UTF-8 files.
 """
 
 import glob
+import re
 import shutil
 import subprocess
 import tempfile
@@ -51,7 +52,7 @@ assert ACCURACY_BIN.exists(), 'Could not find ' + ACCURACY_BIN
 assert ACCSUM_BIN.exists(), 'Could not find ' + ACCSUM_BIN
 
 
-class FilePair(namedtuple('FilePairBase', 'actual generated')):
+class FilePair(namedtuple('FilePairBase', 'correct generated')):
     """
     Pair of tests that are written as documents. Then an accuracy report may
     be produced.
@@ -59,19 +60,19 @@ class FilePair(namedtuple('FilePairBase', 'actual generated')):
 
     @property
     def prefix(self):
-        return str(hash(self.actual))
+        return str(hash(self.correct))
 
     def write_to_dir(self, directory):
-        directory.create_file(self.actual_filename, self.actual)
+        directory.create_file(self.correct_filename, self.correct)
         directory.create_file(self.generated_filename, self.generated)
 
     @property
-    def actual_filename(self):
-        return '%s_actual' % self.prefix
+    def correct_filename(self):
+        return '%s_correct' % self.prefix
 
     @property
     def generated_filename(self):
-        return '%s_gen' % self.prefix
+        return '%s_generated' % self.prefix
 
     @property
     def report_filename(self):
@@ -83,7 +84,7 @@ class FilePair(namedtuple('FilePairBase', 'actual generated')):
         # Return name of the report?
         subprocess.check_call([
             ACCURACY_BIN,
-            directory / self.actual_filename,
+            directory / self.correct_filename,
             directory / self.generated_filename,
             directory / self.report_filename
         ])
@@ -91,6 +92,11 @@ class FilePair(namedtuple('FilePairBase', 'actual generated')):
 
 class ClassResult(namedtuple('ResultBase', 'count missed right character')):
     pass
+
+
+def extract_bracketed_char(text):
+    match = re.match('^{(.+)}$', text)
+    return match.group(1)
 
 
 class ClassReport(object):
@@ -105,6 +111,12 @@ class ClassReport(object):
     def __getitem__(self, key):
         return self._results[key]
 
+    def __iter__(self):
+        return iter(self._results)
+
+    def __contains__(self, key):
+        return key in self._results
+
     @classmethod
     def from_accuracy_report(cls, report_text):
         lines = report_text.split('\n\n')[-1].rstrip('\n').split('\n')
@@ -118,7 +130,7 @@ class ClassReport(object):
         def generate_results():
             for line in lines:
                 count, missed, right, char = line.lstrip().split(None, 3)
-                char = char.lstrip(u('{')).rstrip(u('}'))
+                char = extract_bracketed_char(char)
                 yield ClassResult(int(count), int(missed), right, char)
 
         return cls(*list(generate_results()))
@@ -154,15 +166,21 @@ def accsum(reports):
 
 
 tests = [
-    FilePair(actual=u("Hello{{world>"),
-             generated=u("Hello{<world>")),
-    FilePair(actual=u("Hello<<world>"),
-             generated=u("Hello<{world>")),
+    # From: https://fi.wikipedia.org/w/index.php?title=Tekstintunnistus&oldid=15178566
+    FilePair(correct=  u("""Tekstintunnistus (engl. Optical character recognition, OCR) on yleisnimi teknologialle, jonka avulla tunnistetaan koneellisesti (varsinainen "OCR") tai käsin kirjoittamalla ("ICR", "Intelligent Character Recognition") tuotettua tekstiä, tai esimerkiksi kyselylomakkeiden rastitettuja ruutuja ("OMR", "Optical Mark Recognition") sähköisesti muokattavaan muotoon. Tunnistettava teksti on usein paperilla esim. erilaisissa asiakirjoissa, lehdissä tai erilaisissa kyselylomakkeissa, mutta voi olla myös saapuneissa sähköpostiviesteissä, tai www-sivujen palautteissa."""),
+             generated=u("""Tekstintunnistus (engl. Optical character recognition, OCR) on yleisnimi teknologialle, jonka avulla tunnistetaan koneellisesti (varsinainen "OCR") tai kasin kirjoittamalla ("ICR", "Intelligent Character Recognition") tuotettua tekstiä, tai esimerkiksi kyselylomakkeiden rastitettuja ruutuja ("OMR", "Optical Mark Recognition") sähköisesti muokattavaan muotoon. Tunnistettava teksti on usein paperilla esim. erilaisissa asiakirjoissa, lehdissa tai erilaisissa kyselylomakkeissa, mutta voi olla myös saapuneissa sähkopostiviesteissä, tai www-sivujen palautteissa.""")),
+    FilePair(correct=  u("""Tekstintunnistus [engl. Optical character recognition, OCR] on yleisnimi teknologialle, jonka avulla tunnistetaan koneellisesti (varsinainen "OCR") tai käsin kirjoittamalla ("ICR", "Intelligent Character Recognition") tuotettua tekstiä, tai esimerkiksi kyselylomakkeiden rastitettuja ruutuja ("OMR", "Optical Mark Recognition") sähköisesti muokattavaan muotoon. Tunnistettava teksti on usein paperilla esim. erilaisissa asiakirjoissa, lehdissä tai erilaisissa kyselylomakkeissa, mutta voi olla myös saapuneissa sähköpostiviesteissä, tai www-sivujen palautteissa."""),
+             generated=u("""Tekstintunnistus [engl. Optical character recognition, OCR] on yleisnimi teknologialle, jonka avulla tunnistetaan koneellisesti (varsinainen "OCR") tai kasin kirjoittamalla ("ICR", "Intelligent Character Recognition") tuotettua tekstiä, tai esimerkiksi kyselylomakkeiden rastitettuja ruutuja ("OMR", "Optical Mark Recognition") sähköisesti muokattavaan muotoon. Tunnistettava teksti on usein paperilla esim. erilaisissa asiakirjoissa, lehdissa tai erilaisissa kyselylomakkeissa, mutta voi olla myös saapuneissa sähkopostiviesteissä, tai www-sivujen palautteissa.""")),
+    #FilePair(correct=u("Hello{{world>"),
+    #         generated=u("Hello{<world>")),
+    #FilePair(correct=u("Hello<<world>"),
+    #         generated=u("Hello<{world>")),
     # TODO: hospital/beauty salon test
     # TODO: polish test
 ]
 
-actual = ClassReport.from_accuracy_report(u(
+# TODO: Change this for the ACTUAL expected report (this one is broken)
+expected_report = ClassReport.from_accuracy_report(u(
 r"""UNLV-ISRI OCR Accuracy Report Version 6.1
 -----------------------------------------
     1124   Characters
@@ -195,8 +213,10 @@ r"""UNLV-ISRI OCR Accuracy Report Version 6.1
    Count   Missed   %Right
      112        0   100.00   { }
       20        0   100.00   {"}
-       8        0   100.00   {(}
-       8        0   100.00   {)}
+       7        0   100.00   {(}
+       7        0   100.00   {)}
+       1        0   100.00   {[}
+       1        0   100.00   {]}
       16        0   100.00   {,}
        2        0   100.00   {-}
        8        0   100.00   {.}
@@ -231,6 +251,13 @@ r"""UNLV-ISRI OCR Accuracy Report Version 6.1
 
 
 if __name__ == '__main__':
+    import sys
+    try:
+        _, flag = sys.argv
+    except:
+        debug = False
+    else:
+        debug = flag == '--debug'
 
     # Create temporary files for each...
     with TemporaryDirectory() as temp_dir:
@@ -241,9 +268,32 @@ if __name__ == '__main__':
         reports = glob.glob(temp_dir / '*_report')
         assert len(reports) == len(tests)
 
-        final_report = accsum(reports)
-        import os; os.system('open ' + temp_dir)
-        import pdb; pdb.set_trace()
+        try:
+            actual_report = accsum(reports)
+        except subprocess.CalledProcessError as error:
+            if debug:
+                sys.stderr.write(str(error))
+                sys.stderr.write('\n')
+                import pdb
+                pdb.set_trace()
+            else:
+                raise error
 
-        raise NotImplementedError
+        for char in expected_report:
+            # Check if the character is even in the report.
+            assert char in actual_report, (
+                '%r not in report %r' % (char, set(actual_report))
+            )
 
+            # Check that the counts match
+            expected, actual = expected_report[char], actual_report[char]
+            assert expected.count == actual.count, (
+                '{%s}: counts does not match expected: %d; actual: %d' % (
+                    char, expected.count, actual.count
+                )
+            )
+            assert expected.missed == actual.missed, (
+                '{%s}: #missed does not match expected: %d; actual: %d' % (
+                    char, expected.missed, actual.missed
+                )
+            )
