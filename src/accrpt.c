@@ -22,10 +22,13 @@
  *
  **********************************************************************/
 
+#include <utf8proc.h>
+
 #include "accrpt.h"
 #include "sort.h"
 #include "isri_version.h"
 
+#include <assert.h>
 #include <string.h>
 
 #define TITLE    "UNLV-ISRI OCR Accuracy Report Version " ISRI_VERSION "\n"
@@ -33,8 +36,9 @@
 
 #define CLASS_OFFSET  29
 #define CONF_OFFSET   20
+#define LINE_LENGTH   100
 
-static char line[100];
+static char line[LINE_LENGTH];
 
 /**********************************************************************/
 
@@ -130,12 +134,74 @@ long *value1, *value2;
 }
 /**********************************************************************/
 
+static Charvalue read_char(line)
+char *line;
+{
+    Charvalue value = INVALID_CHARVALUE;
+    char *next_byte = line;
+
+    /* Check for start delimiter at byte 0. */
+    if (*next_byte != '{') {
+        return INVALID_CHARVALUE;
+    }
+    next_byte++;
+
+    /* Check for first distinguishing byte at byte 1 */
+    if (*next_byte == '<') {
+        /* Peek at the following byte. */
+        if (next_byte[1] == '}') {
+            /* It's a stray '<' */
+            value = '<';
+        } else {
+            /* Peek at following byte, yet again! */
+            if (next_byte[1] == '\\' && next_byte[2] == 'n') {
+                value = NEWLINE;
+                next_byte += 3; /* consume three bytes: <\n */
+            } else {
+                /* Decode the hexadecimal escape. */
+                next_byte++;
+                int offset;
+                int ret = sscanf(next_byte, "%x%n", &value, &offset);
+                if (ret != 1) {
+                    return INVALID_CHARVALUE;
+                }
+                next_byte += offset;
+            }
+
+            if (*next_byte != '>') {
+                return INVALID_CHARVALUE;
+            }
+        }
+
+        next_byte++;
+    } else {
+        /* It's a bare UTF-8 character. */
+        /* Read at most 4 characters, and decode the utf-8 bytes. */
+        int bytes_read = utf8proc_iterate((utf8proc_uint8_t *) next_byte,
+                                          4, (utf8proc_int32_t *) &value);
+        if (bytes_read < 1) {
+            return INVALID_CHARVALUE;
+        } else {
+            next_byte += bytes_read;
+        }
+    }
+
+    /* Check for end delimiter. */
+    if (*next_byte == '}') {
+        return value;
+    }
+
+    return INVALID_CHARVALUE;
+}
+/**********************************************************************/
+
 void read_accrpt(accdata, filename)
 Accdata *accdata;
 char *filename;
 {
     FILE *f;
-    long characters, errors, value1, value2, value3;
+    long characters, errors, value1, value2;
+    Charvalue value3;
     f = open_file(filename, "r");
     if (read_line(f) && strncmp(line, TITLE, sizeof(TITLE) - 3) == 0 &&
     read_line(f) && strcmp(line, DIVIDER) == 0 &&
@@ -152,17 +218,17 @@ char *filename;
     {
         while (read_line(f) && line[0] != NEWLINE);
         if (errors > 0 && read_line(f))
-            while (read_two(f, &value1, &value2))
+            while (read_two(f, &value1, &value2)) {
+                /* TODO: bug here: does not handle UTF-8 or <bracket>
+                 * <escaped> or {<} properly... */
                 add_conf(accdata, &line[CONF_OFFSET], value1, value2);
+            }
         if (characters > 0 && read_line(f))
-            while (read_two(f, &value1, &value2))
-            {
-                if (line[CLASS_OFFSET + 2] == '}')
-                    value3 = line[CLASS_OFFSET + 1];
-                else if (line[CLASS_OFFSET + 2] == '\\')
-                    value3 = NEWLINE;
-                else
-                    sscanf(&line[CLASS_OFFSET + 2], "%lx", &value3);
+            while (read_two(f, &value1, &value2)) {
+                value3 = read_char(line + CLASS_OFFSET);
+                if (value3 == INVALID_CHARVALUE) {
+                    error_string("invalid character in", (filename ? filename : "stdin"));
+                }
                 add_class(accdata, value3, value1, value2);
             }
     }

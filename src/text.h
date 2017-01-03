@@ -45,6 +45,7 @@
 #define NON_BREAKING_SPACE  0x0A0
 #define REJECT_CHARACTER    '~'
 #define SUSPECT_MARKER      '^'
+#define INVALID_CHARVALUE   ((Charvalue) (-1))
 
 /* Use UTF-32 internally. */
 typedef uint32_t Charvalue;
