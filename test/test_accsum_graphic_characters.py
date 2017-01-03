@@ -175,14 +175,11 @@ def accsum(reports):
     """
     Runs accsum, returning a ClassReport (the final section in the report).
     """
-    # Save the accuracy report to the temporary file.
-    with tempfile.TemporaryFile() as temp_file:
-        subprocess.check_call([ACCSUM_BIN] + reports, stdout=temp_file)
-
-        temp_file.flush()
-        temp_file.seek(0)
-
-        contents = temp_file.read().decode('UTF-8')
+    report_bytes = subprocess.check_output(
+        [ACCSUM_BIN] + reports,
+        stderr=subprocess.STDOUT
+    )
+    contents = report_bytes.decode('UTF-8')
 
     return ClassReport.from_accuracy_report(contents)
 
@@ -204,6 +201,8 @@ tests = [
              generated=nfc("""kasin kirjoittämalla""")),
     FilePair(correct=  nfc("""sähköisesti muokattavaan muotoon"""),
              generated=nfc("""sähköisesti muökattavaan muotoon""")),
+
+    # TODO: combining character test!
 
     # Hiragana
     FilePair(correct=  nfc("""びょおいん"""),
@@ -292,11 +291,23 @@ if __name__ == '__main__':
     with TemporaryDirectory() as temp_dir:
         try:
             main(temp_dir)
-        except (subprocess.CalledProcessError, AssertionError) as error:
+        except subprocess.CalledProcessError as error:
+            sys.stderr.write("Error %d running command: %s" % (
+                error.returncode,
+                ' '.join(error.cmd)
+            ))
+            sys.stderr.write("\n")
+
+            if error.output is not None:
+                sys.stderr.write("\n--- stdout ---\n")
+                sys.stderr.write(error.output)
+
             if debug:
-                sys.stderr.write(str(error))
-                sys.stderr.write('\n')
                 import pdb
                 pdb.set_trace()
-            else:
-                raise error
+            sys.exit(-1)
+        except AssertionError:
+            if debug:
+                import pdb
+                pdb.set_trace()
+            sys.exit(-1)
