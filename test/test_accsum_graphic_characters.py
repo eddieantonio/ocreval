@@ -1,5 +1,19 @@
 #!/usr/bin/env python
 # -*- encoding: UTF-8 -*-
+# Copyright 2017 Eddie Antonio Santos <easantos@ualberta.ca>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 
 """
 Tests accsum on UTF-8 files.
@@ -10,6 +24,7 @@ import re
 import shutil
 import subprocess
 import tempfile
+import unicodedata
 
 import os.path as p
 from collections import namedtuple, OrderedDict
@@ -60,7 +75,7 @@ class FilePair(namedtuple('FilePairBase', 'correct generated')):
 
     @property
     def prefix(self):
-        return str(hash(self.correct))
+        return str(hash(self.correct)).replace('-', '_')
 
     def write_to_dir(self, directory):
         directory.create_file(self.correct_filename, self.correct)
@@ -97,6 +112,13 @@ class ClassResult(namedtuple('ResultBase', 'count missed right character')):
 def extract_bracketed_char(text):
     match = re.match('^{(.+)}$', text)
     return match.group(1)
+
+
+def nfc(text):
+    """
+    Returns NFC normalized text.
+    """
+    return unicodedata.normalize('NFC', u(text))
 
 
 class ClassReport(object):
@@ -166,88 +188,95 @@ def accsum(reports):
 
 
 tests = [
+    # Test some delimiting and special characters
+    FilePair(correct=  nfc("{{"),
+             generated=nfc("{<")),
+    FilePair(correct=  nfc("<<"),
+             generated=nfc("<{")),
+    FilePair(correct=  nfc("q\\z"),
+             generated=nfc("q|z")),
+
+    # Latin scripts
+    FilePair(correct=  nfc("Mirosław"),
+             generated=nfc("Miroslaw")),
     # From: https://fi.wikipedia.org/w/index.php?title=Tekstintunnistus&oldid=15178566
-    FilePair(correct=  u("""Tekstintunnistus (engl. Optical character recognition, OCR) on yleisnimi teknologialle, jonka avulla tunnistetaan koneellisesti (varsinainen "OCR") tai käsin kirjoittamalla ("ICR", "Intelligent Character Recognition") tuotettua tekstiä, tai esimerkiksi kyselylomakkeiden rastitettuja ruutuja ("OMR", "Optical Mark Recognition") sähköisesti muokattavaan muotoon. Tunnistettava teksti on usein paperilla esim. erilaisissa asiakirjoissa, lehdissä tai erilaisissa kyselylomakkeissa, mutta voi olla myös saapuneissa sähköpostiviesteissä, tai www-sivujen palautteissa."""),
-             generated=u("""Tekstintunnistus (engl. Optical character recognition, OCR) on yleisnimi teknologialle, jonka avulla tunnistetaan koneellisesti (varsinainen "OCR") tai kasin kirjoittamalla ("ICR", "Intelligent Character Recognition") tuotettua tekstiä, tai esimerkiksi kyselylomakkeiden rastitettuja ruutuja ("OMR", "Optical Mark Recognition") sähköisesti muokattavaan muotoon. Tunnistettava teksti on usein paperilla esim. erilaisissa asiakirjoissa, lehdissa tai erilaisissa kyselylomakkeissa, mutta voi olla myös saapuneissa sähkopostiviesteissä, tai www-sivujen palautteissa.""")),
-    FilePair(correct=  u("""Tekstintunnistus [engl. Optical character recognition, OCR] on yleisnimi teknologialle, jonka avulla tunnistetaan koneellisesti (varsinainen "OCR") tai käsin kirjoittamalla ("ICR", "Intelligent Character Recognition") tuotettua tekstiä, tai esimerkiksi kyselylomakkeiden rastitettuja ruutuja ("OMR", "Optical Mark Recognition") sähköisesti muokattavaan muotoon. Tunnistettava teksti on usein paperilla esim. erilaisissa asiakirjoissa, lehdissä tai erilaisissa kyselylomakkeissa, mutta voi olla myös saapuneissa sähköpostiviesteissä, tai www-sivujen palautteissa."""),
-             generated=u("""Tekstintunnistus [engl. Optical character recognition, OCR] on yleisnimi teknologialle, jonka avulla tunnistetaan koneellisesti (varsinainen "OCR") tai kasin kirjoittamalla ("ICR", "Intelligent Character Recognition") tuotettua tekstiä, tai esimerkiksi kyselylomakkeiden rastitettuja ruutuja ("OMR", "Optical Mark Recognition") sähköisesti muokattavaan muotoon. Tunnistettava teksti on usein paperilla esim. erilaisissa asiakirjoissa, lehdissa tai erilaisissa kyselylomakkeissa, mutta voi olla myös saapuneissa sähkopostiviesteissä, tai www-sivujen palautteissa.""")),
-    #FilePair(correct=u("Hello{{world>"),
-    #         generated=u("Hello{<world>")),
-    #FilePair(correct=u("Hello<<world>"),
-    #         generated=u("Hello<{world>")),
-    # TODO: hospital/beauty salon test
-    # TODO: polish test
+    FilePair(correct=  nfc("""käsin kirjoittamalla"""),
+             generated=nfc("""kasin kirjoittämalla""")),
+    FilePair(correct=  nfc("""sähköisesti muokattavaan muotoon"""),
+             generated=nfc("""sähköisesti muökattavaan muotoon""")),
+
+    # Hiragana
+    FilePair(correct=  nfc("""びょおいん"""),
+             generated=nfc("""びよおいん""")),
+
+    # Emoji
+    FilePair(correct=  nfc("""💩"""),
+             generated=nfc("""👜""")),
 ]
 
 # TODO: Change this for the ACTUAL expected report (this one is broken)
 expected_report = ClassReport.from_accuracy_report(u(
 r"""UNLV-ISRI OCR Accuracy Report Version 6.1
 -----------------------------------------
-    1124   Characters
-       8   Errors
-   99.29%  Accuracy
-
-       0   Reject Characters
-       0   Suspect Markers
-       0   False Marks
-    0.00%  Characters Marked
-   99.29%  Accuracy After Correction
-
-     Ins    Subst      Del   Errors
-       0        0        0        0   Marked
-       0        6        2        8   Unmarked
-       0        6        2        8   Total
 
    Count   Missed   %Right
-     112        0   100.00   ASCII Spacing Characters
-      62        0   100.00   ASCII Special Symbols
-      42        0   100.00   ASCII Uppercase Letters
-     908        6    99.34   ASCII Lowercase Letters
-    1124        6    99.47   Total
-
-  Errors   Marked   Correct-Generated
-       4        0   {ä}-{a}
-       2        0   {}-{<\n>}
-       2        0   {ö}-{o}
-
-   Count   Missed   %Right
-     112        0   100.00   { }
-      20        0   100.00   {"}
-       7        0   100.00   {(}
-       7        0   100.00   {)}
-       1        0   100.00   {[}
-       1        0   100.00   {]}
-      16        0   100.00   {,}
-       2        0   100.00   {-}
-       8        0   100.00   {.}
-       8        0   100.00   {C}
-       4        0   100.00   {I}
-       4        0   100.00   {M}
-      10        0   100.00   {O}
-      12        0   100.00   {R}
-       4        0   100.00   {T}
-     104        0   100.00   {a}
-      16        0   100.00   {c}
-       4        0   100.00   {d}
-      82        0   100.00   {e}
-      12        0   100.00   {g}
-      10        0   100.00   {h}
-     116        0   100.00   {i}
-      12        0   100.00   {j}
-      42        0   100.00   {k}
-      54        0   100.00   {l}
-      20        0   100.00   {m}
-      66        0   100.00   {n}
-      48        0   100.00   {o}
-      14        0   100.00   {p}
-      30        0   100.00   {r}
-      94        0   100.00   {s}
-      98        0   100.00   {t}
-      36        0   100.00   {u}
-      14        0   100.00   {v}
-       6        0   100.00   {w}
-      30        6    80.00   {y}
+      12        0   100.00   {<\n>}
+       3        0   100.00   { }
+       2        1    50.00   {<}
+       2        1    50.00   {{}
+       1        1    50.00   {\}
+       1        0   100.00   {M}
+       8        1    80.00   {a}
+       2        0   100.00   {i}
+       1        0   100.00   {j}
+       4        0   100.00   {k}
+       4        0   100.00   {m}
+       6        1    83.33   {o}
+       1        0   100.00   {r}
+       3        0   100.00   {s}
+       1        0   100.00   {w}
+       1        1     0.00   {ł}
+       2        1    50.00   {ä}
+       1        1   100.00   {ö}
+       1        1     0.00   {ょ}
+       1        1     0.00   {💩}
 """))
+
+
+def main(temp_dir):
+    # Create each individual accuracy report:
+    for test in tests:
+        test.write_accuracy_report(temp_dir)
+
+    reports = glob.glob(temp_dir / '*_report')
+    assert len(reports) == len(tests)
+
+    # Create the accuracy summary!
+    actual_report = accsum(reports)
+
+    for char in expected_report:
+        # Check if the character is even in the report.
+        assert char in actual_report, (
+            '{%s} not in report: %r' % (char, set(actual_report))
+        )
+
+        # Check that the counts match
+        expected, actual = expected_report[char], actual_report[char]
+        assert expected.count == actual.count, (
+            '{%s}: counts does not match expected: %d; actual: %d' % (
+                char, expected.count, actual.count
+            )
+        )
+        assert expected.missed == actual.missed, (
+            '{%s}: #missed does not match expected: %d; actual: %d' % (
+                char, expected.missed, actual.missed
+            )
+        )
+
+    difference = set(actual_report) - set(expected_report)
+    assert len(difference) == 0, (
+        'Actual report has extra characters: %r' % (difference,)
+    )
 
 
 if __name__ == '__main__':
@@ -261,16 +290,9 @@ if __name__ == '__main__':
 
     # Create temporary files for each...
     with TemporaryDirectory() as temp_dir:
-        # Create each individual accuracy report:
-        for test in tests:
-            test.write_accuracy_report(temp_dir)
-
-        reports = glob.glob(temp_dir / '*_report')
-        assert len(reports) == len(tests)
-
         try:
-            actual_report = accsum(reports)
-        except subprocess.CalledProcessError as error:
+            main(temp_dir)
+        except (subprocess.CalledProcessError, AssertionError) as error:
             if debug:
                 sys.stderr.write(str(error))
                 sys.stderr.write('\n')
@@ -278,22 +300,3 @@ if __name__ == '__main__':
                 pdb.set_trace()
             else:
                 raise error
-
-        for char in expected_report:
-            # Check if the character is even in the report.
-            assert char in actual_report, (
-                '%r not in report %r' % (char, set(actual_report))
-            )
-
-            # Check that the counts match
-            expected, actual = expected_report[char], actual_report[char]
-            assert expected.count == actual.count, (
-                '{%s}: counts does not match expected: %d; actual: %d' % (
-                    char, expected.count, actual.count
-                )
-            )
-            assert expected.missed == actual.missed, (
-                '{%s}: #missed does not match expected: %d; actual: %d' % (
-                    char, expected.missed, actual.missed
-                )
-            )
