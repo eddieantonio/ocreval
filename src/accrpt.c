@@ -175,13 +175,26 @@ char *line;
 
         next_byte++;
     } else {
-        /* It's a bare UTF-8 character. */
+        /* It's a UTF-8 character. */
         /* Read at most 4 characters, and decode the utf-8 bytes. */
         int bytes_read = utf8proc_iterate((utf8proc_uint8_t *) next_byte,
                                           4, (utf8proc_int32_t *) &value);
         if (bytes_read < 1) {
             return INVALID_CHARVALUE;
-        } else {
+        }
+        next_byte += bytes_read;
+
+        if (value == COMBINING_MARK_BASE && *next_byte != '}') {
+            /* This is the base of a combining character. The *actual*
+             * character is the combining mark that follows. */
+            /* Decode the next UTF-8 bytes. It should always be non-ASCII. */
+            int bytes_read = utf8proc_iterate((utf8proc_uint8_t *) next_byte,
+                                              4, (utf8proc_int32_t *) &value);
+            /* It should be non-ASCII, so there should be AT LEAST two bytes
+             * to read. */
+            if (bytes_read < 2) {
+                return INVALID_CHARVALUE;
+            }
             next_byte += bytes_read;
         }
     }
