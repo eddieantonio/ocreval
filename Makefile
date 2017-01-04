@@ -87,7 +87,7 @@ clean-test:
 	$(MAKE) -C test clean
 
 TEST_ARGS =
-test: $(LIBRARY.a)
+test: $(EXECUTABLES) $(LIBRARY.a)
 	$(MAKE) -C test
 
 # Uses https://github.com/alexch/rerun

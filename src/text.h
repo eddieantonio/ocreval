@@ -45,6 +45,8 @@
 #define NON_BREAKING_SPACE  0x0A0
 #define REJECT_CHARACTER    '~'
 #define SUSPECT_MARKER      '^'
+#define COMBINING_MARK_BASE ((Charvalue) 0x25CC) /* ◌ -- Dotted circle */
+#define INVALID_CHARVALUE   ((Charvalue) (-1))
 
 /* Use UTF-32 internally. */
 typedef uint32_t Charvalue;
