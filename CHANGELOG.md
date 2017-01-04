@@ -3,16 +3,20 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This file is inspired by [Keep a `CHANGELOG`](http://keepachangelog.com/).
 
+## [6.1.2] - 2017-01-04
+### Fixed
+- Read in UTF-8 characters in `accsum` ([#14])
+
 ## [6.1.1] - 2016-02-22
 ### Fixed
-- No longer spuriously abort if inputs are longer than 65,536 characters
+- No longer spuriously abort if inputs are longer than 65,536 characters ([#10])
 
 ## [6.1.0] - 2016-01-01
 ### Added
-- `Make exports` which outputs shell `export` commands (to avoid global installation)
+- `make exports` which outputs shell `export` commands (to avoid global installation)
 
 ### Changed
-- More conventional directory layout (#4)
+- More conventional directory layout ([#4])
 
 ## [6.0.1] - 2016-01-04
 ### Fixed
@@ -39,9 +43,14 @@ This file is inspired by [Keep a `CHANGELOG`](http://keepachangelog.com/).
 ### Fixed
 - Compiles on modern OS X and Ubuntu
 
-[Unreleased]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/compare/v6.1.1...HEAD
-[6.1.1]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/compare/v6.1.0...v6.1.0
+[Unreleased]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/compare/v6.1.2...HEAD
+[6.1.2]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/compare/v6.1.1...v6.1.2
+[6.1.1]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/compare/v6.1.0...v6.1.1
 [6.1.0]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/compare/v6.0.1...v6.1.0
 [6.0.1]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/compare/v6.0.0...v6.0.1
 [6.0.0]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/compare/v5.1.3...v6.0.0
 [5.1.3]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/compare/v5.1.0...v5.1.3
+
+[#4]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/issues/4
+[#10]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/issues/10
+[#14]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/issues/14

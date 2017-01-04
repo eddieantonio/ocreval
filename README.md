@@ -84,7 +84,7 @@ for copyright information regarding the original code.
 
 The ISRI Analytic Tools for OCR Evaluation
 
-Copyright 2015, 2016 Eddie Antonio Santos
+Copyright 2015–2017 Eddie Antonio Santos
 
 Copyright 1996 The Board of Regents of the Nevada System of Higher
 Education, on behalf, of the University of Nevada, Las Vegas,
