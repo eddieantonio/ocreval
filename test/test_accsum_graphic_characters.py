@@ -121,6 +121,13 @@ def nfc(text):
     return unicodedata.normalize('NFC', u(text))
 
 
+def nfd(text):
+    """
+    Returns NFD normalized text.
+    """
+    return unicodedata.normalize('NFD', u(text))
+
+
 class ClassReport(object):
     """
     Wraps an accuracy report.
@@ -202,7 +209,9 @@ tests = [
     FilePair(correct=  nfc("""sähköisesti muokattavaan muotoon"""),
              generated=nfc("""sähköisesti muökattavaan muotoon""")),
 
-    # TODO: combining character test!
+    # Combining characters. Notice the use of NFD (decomposed)
+    FilePair(correct  =nfd("q̃◌q̃"),
+             generated=nfd("q̃◌q̂")),
 
     # Hiragana
     FilePair(correct=  nfc("""びょおいん"""),
@@ -213,13 +222,13 @@ tests = [
              generated=nfc("""👜""")),
 ]
 
-# TODO: Change this for the ACTUAL expected report (this one is broken)
+# TODO: Change this for an ACTUAL expected report (this one is incomplete)
 expected_report = ClassReport.from_accuracy_report(u(
 r"""UNLV-ISRI OCR Accuracy Report Version 6.1
 -----------------------------------------
 
    Count   Missed   %Right
-       8        0   100.00   {<\n>}
+       9        0   100.00   {<\n>}
        3        0   100.00   { }
        2        1    50.00   {<}
        2        1    50.00   {{}
@@ -235,7 +244,7 @@ r"""UNLV-ISRI OCR Accuracy Report Version 6.1
        3        0   100.00   {m}
        3        0   100.00   {n}
        6        1    83.33   {o}
-       1        0   100.00   {q}
+       3        0   100.00   {q}
        2        0   100.00   {r}
        5        0   100.00   {s}
        6        0   100.00   {t}
@@ -245,13 +254,15 @@ r"""UNLV-ISRI OCR Accuracy Report Version 6.1
        1        0   100.00   {z}
        1        1     0.00   {ł}
        2        1    50.00   {ä}
-       1        0     0.00   {ö}
-       1        0     0.00   {び}
+       1        0   100.00   {ö}
+       1        0   100.00   {び}
        1        1     0.00   {ょ}
-       1        0     0.00   {お}
-       1        0     0.00   {い}
-       1        0     0.00   {ん}
+       1        0   100.00   {お}
+       1        0   100.00   {い}
+       1        0   100.00   {ん}
        1        1     0.00   {💩}
+       2        1    50.00   {◌̃}
+       1        0   100.00   {◌}
 """))
 
 
