@@ -5,7 +5,7 @@ LOCAL_INCLUDE_DIR := $(abspath $(TOP)src)
 # For use with the -L option.
 LOCAL_LINK_DIR := $(abspath $(TOP)lib)
 
-LIBISRI = $(LOCAL_LINK_DIR)/libisri.a
+LIBOCREVAL = $(LOCAL_LINK_DIR)/libocreval.a
 
 # Compilation flags for all files.
 override CFLAGS += -ansi
@@ -18,7 +18,7 @@ override CPPFLAGS += -I/usr/local/include $(CPPDEFINES)
 LDFLAGS += -L/usr/local/lib
 LDLIBS = -lm -lutf8proc
 
-# Use libisri, created in lib/
+# Use libocreval, created in lib/
 override CPPFLAGS += -I$(LOCAL_INCLUDE_DIR)
 LDFLAGS += -L$(LOCAL_LINK_DIR)
-LDLIBS := -lisri $(LDLIBS)
+LDLIBS := -locreval $(LDLIBS)

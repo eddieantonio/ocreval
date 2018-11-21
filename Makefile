@@ -23,17 +23,17 @@ TOOLS = accci accdist accsum accuracy editop editopcost editopsum \
 		groupacc ngram nonstopacc synctext vote wordacc wordaccci \
 		wordaccdist wordaccsum wordfreq
 
-# Name: libisri, or -lisri
-NAME = isri
-MAJOR_VERSION = 6
-MINOR_VERSION = 1
+# Name: libocreval, or -locreval
+NAME = ocreval
+MAJOR_VERSION = 7
+MINOR_VERSION = 0
 
 # All the executables go in bin/
 EXECUTABLES = $(addprefix bin/,$(TOOLS))
 # All manual pages go in share/man/man1
 MANPAGES = $(foreach TOOL,$(TOOLS),share/man/man1/$(TOOL).1)
 
-include use-libisri-internal.mk
+include use-libocreval-internal.mk
 
 LIBRARY.a = lib/lib$(NAME).a
 ifeq ($(shell uname -s),Darwin)
@@ -44,7 +44,7 @@ endif
 
 ################################################################################
 
-# Allows for proper compilation and linking settings for libisri
+# Allows for proper compilation and linking settings for libocreval
 
 all: $(EXECUTABLES)
 
@@ -60,7 +60,7 @@ install-man: $(MANPAGES)
 
 # Prints a bunch of exports you can source in your shell's startup file.
 exports:
-	@echo '#' ISRI Evaluation Tools
+	@echo '#' ocreval
 	@echo export PATH='$(TOP)bin:$$PATH'
 	@echo export MANPATH='$(TOP)share/man:$$MANPATH'
 ifeq ($(shell uname -s),Darwin)
@@ -103,7 +103,7 @@ watch:
 
 # Executable sources are C files that provide a main() for executables.
 EXECUTABLE_SOURCES := $(foreach TOOL,$(TOOLS),src/$(TOOL).c)
-# Modules are all object files exclusively for inclusion in libisri
+# Modules are all object files exclusively for inclusion in libocreval
 MODULE_SOURCES := $(filter-out $(EXECUTABLE_SOURCES),$(wildcard src/*.c))
 MODULES := $(MODULE_SOURCES:.c=.o)
 # Dependencies are .d files included by Make
@@ -118,7 +118,7 @@ bin/%: src/%.c $(LIBRARY.a)
 $(LIBRARY.a): $(MODULES)
 	$(AR) $(ARFLAGS) -s $@ $^
 
-# Special case: Generate this include file, required by libisri.a
+# Special case: Generate this include file, required by libocreval.a
 $(TOP)src/word_break_property.h src/word_break_property.h: \
 		libexec/generate_word_break.py libexec/WordBreakProperty.txt.gz
 	./$< > $@
