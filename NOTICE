@@ -1,12 +1,16 @@
 The ISRI Analytic Tools for OCR Evalutaion
 
-Originally developed by Dr. Steven Rice in 1996 for his doctoral dissertation,
-it has been revived by @eddieantonio to continue its OCR evaluation goodness
-for all of the languages representable by Unicode — including Haida!
+Originally developed by Dr. Steven Rice in 1996 for his doctoral dissertation.
+
+ocreval
+
+An updated port of the ISRI Analytic Tools written by @eddieantonio to
+continue its OCR evaluation goodness for all of the languages representable by
+Unicode!
 
 ---
 
-Copyright 2015–2017 Eddie Antonio Santos
+Copyright 2015–2018 Eddie Antonio Santos
 
 Copyright 1996 The Board of Regents of the Nevada System of Higher
 Education, on behalf, of the University of Nevada, Las Vegas,

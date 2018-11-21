@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This file is inspired by [Keep a `CHANGELOG`](http://keepachangelog.com/).
 
+## [7.0.0] - 2018-11-21
+### Changed
+- Changed name from `isri-ocr-evaluation-tools` to `ocreval` ([#21])
+
 ## [6.1.2] - 2017-01-04
 ### Fixed
 - Read in UTF-8 characters in `accsum` ([#14])
@@ -43,7 +47,7 @@ This file is inspired by [Keep a `CHANGELOG`](http://keepachangelog.com/).
 ### Fixed
 - Compiles on modern OS X and Ubuntu
 
-[Unreleased]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/compare/v6.1.2...HEAD
+[7.0.0]: https://github.com/eddieantonio/ocreval/compare/v6.1.2...v7.0.0
 [6.1.2]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/compare/v6.1.1...v6.1.2
 [6.1.1]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/compare/v6.1.0...v6.1.1
 [6.1.0]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/compare/v6.0.1...v6.1.0
@@ -54,3 +58,4 @@ This file is inspired by [Keep a `CHANGELOG`](http://keepachangelog.com/).
 [#4]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/issues/4
 [#10]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/issues/10
 [#14]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/issues/14
+[#21]: https://github.com/eddieantonio/ocreval/issues/21
