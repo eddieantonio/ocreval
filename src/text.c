@@ -87,7 +87,7 @@ static void read_contents(f, text, find_markers, suspect_marker)
 	utf8proc_uint8_t buffer[4];
 
 	int byte, read_status, decode_status;
-	ssize_t code_unit_size;
+	size_t code_unit_size;
 	utf8proc_int32_t code_point;
 	byte = getc(f);
 
