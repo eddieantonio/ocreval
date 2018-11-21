@@ -8,17 +8,16 @@ guide][user-guide] for more information.
 
 [user-guide]: https://github.com/eddieantonio/ocreval/raw/master/user-guide.pdf
 
-`ocreval` is a modern port of the [ISRI Analytic Tools][], with UTF-8
-support and other improvements.
+`ocreval` is a modern port of the [ISRI Analytic Tools for OCR Evaluation][isri],
+with UTF-8 support and other improvements.
 
-[ISRI Analytic Tools]: http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.216.9427&rep=rep1&type=pdf
+[isri]: http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.216.9427&rep=rep1&type=pdf
 
 # Install (macOS)
 
 Using [Homebrew][brew]:
 
-    brew tap eddieantonio/eddieantonio
-    brew install ocreval
+    brew install eddieantonio/eddieantonio/ocreval
 
 [brew]: http://brew.sh/
 
