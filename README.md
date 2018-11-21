@@ -1,6 +1,6 @@
 # ocreval
 
-[![Build Status](https://travis-ci.org/eddieantonio/orceval.svg?branch=master)](https://travis-ci.org/eddieantonio/ocreval)
+[![Build Status](https://travis-ci.org/eddieantonio/ocreval.svg?branch=master)](https://travis-ci.org/eddieantonio/ocreval)
 
 The `ocreval` consist of 17 tools for measuring the
 performance of and experimenting with OCR output. See [the user
