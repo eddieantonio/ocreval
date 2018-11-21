@@ -1,21 +1,27 @@
-# isri-ocr-evaluation-tools
+# ocreval
 
-[![Build Status](https://travis-ci.org/eddieantonio/isri-ocr-evaluation-tools.svg?branch=master)](https://travis-ci.org/eddieantonio/isri-ocr-evaluation-tools)
+[![Build Status](https://travis-ci.org/eddieantonio/orceval.svg?branch=master)](https://travis-ci.org/eddieantonio/ocreval)
 
-The ISRI Analytic Tools consist of 17 tools for measuring the
+The `ocreval` consist of 17 tools for measuring the
 performance of and experimenting with OCR output. See [the user
 guide][user-guide] for more information.
 
-[user-guide]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/blob/HEAD/user-guide.pdf
+[user-guide]: https://github.com/eddieantonio/ocreval/raw/master/user-guide.pdf
 
-# Install (OS X)
+`ocreval` is a modern port of the [ISRI Analytic Tools][], with UTF-8
+support and other improvements.
+
+[ISRI Analytic Tools]: http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.216.9427&rep=rep1&type=pdf
+
+# Install (macOS)
 
 Using [Homebrew][brew]:
 
     brew tap eddieantonio/eddieantonio
-    brew install isri-ocr-evaluation-tools
+    brew install ocreval
 
 [brew]: http://brew.sh/
+
 
 Building
 ========
@@ -39,11 +45,7 @@ below.
 
 ### Other Linux
 
-The automated way (copy-paste this one line):
-
-    curl -fsSL http://www.eddieantonio.ca/isri-ocr-evaluation-tools/install_utf8proc.sh | sh
-
-The manual way:
+Install `libutf8proc-dev` manually:
 
     curl -OL https://github.com/JuliaLang/utf8proc/archive/v1.3.1.tar.gz
     tar xzf v1.3.1.tar.gz
@@ -64,7 +66,7 @@ The manual way:
 Install to `/usr/local/`:
 
     sudo make install
-    
+
 Note: You will not need `sudo` on OS X if you have `brew` installed.
 
 ## Installing "locally"
@@ -82,9 +84,11 @@ for copyright information regarding the original code.
 
 # License
 
-The ISRI Analytic Tools for OCR Evaluation
+### ocreval
 
-Copyright 2015–2017 Eddie Antonio Santos
+Copyright 2015–2018 Eddie Antonio Santos
+
+### The ISRI Analytic Tools for OCR Evaluation
 
 Copyright 1996 The Board of Regents of the Nevada System of Higher
 Education, on behalf, of the University of Nevada, Las Vegas,
