@@ -28,10 +28,10 @@
 #include <utf8proc.h>
 
 #include "text.h"
-#include "isri_version.h"
+#include "ocreval_version.h"
 
-#define TITLE    "UNLV-ISRI OCR Vendor-Independent Interface Version " ISRI_VERSION "\n"
-#define DIVIDER  "------------------------------------------------------\n"
+#define TITLE    "ocreval Vendor-Independent Interface Version " OCREVAL_VERSION "\n"
+#define DIVIDER  "------------------------------------------------\n"
 /* Combining characters often use this character as a placeholder base
  * character: e.g., ◌̉ */
 #define DOTTED_CIRCLE 0x25CC

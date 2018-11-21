@@ -85,7 +85,7 @@ TEST find_words_segments_spanish_words() {
 
 /* Exercises numeric processing. */
 TEST find_words_segments_numerals() {
-    /* From https://github.com/eddieantonio/isri-ocr-evaluation-tools/issues/3 */
+    /* From https://github.com/eddieantonio/ocreval/issues/3 */
     cstring_to_text(text, "PLASTIK-KARTON BARDA %18 *1,75");
     find_words(wordlist, text);
 

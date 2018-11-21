@@ -224,8 +224,8 @@ tests = [
 
 # TODO: Change this for an ACTUAL expected report (this one is incomplete)
 expected_report = ClassReport.from_accuracy_report(u(
-r"""UNLV-ISRI OCR Accuracy Report Version 6.1
------------------------------------------
+r"""ocreval Accuracy Report Version 7.0
+-----------------------------------
 
    Count   Missed   %Right
        9        0   100.00   {<\n>}

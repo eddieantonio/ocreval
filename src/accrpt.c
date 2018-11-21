@@ -29,13 +29,13 @@
 
 #include "accrpt.h"
 #include "sort.h"
-#include "isri_version.h"
+#include "ocreval_version.h"
 
 #include <assert.h>
 #include <string.h>
 
-#define TITLE    "UNLV-ISRI OCR Accuracy Report Version " ISRI_VERSION "\n"
-#define DIVIDER  "-----------------------------------------\n"
+#define TITLE    "ocreval Accuracy Report Version " OCREVAL_VERSION "\n"
+#define DIVIDER  "-----------------------------------\n"
 
 #define CLASS_OFFSET  29
 #define CONF_OFFSET   20

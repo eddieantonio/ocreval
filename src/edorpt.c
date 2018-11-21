@@ -24,10 +24,10 @@
 
 #include "edorpt.h"
 #include "util.h"
-#include "isri_version.h"
+#include "ocreval_version.h"
 
-#define TITLE    "UNLV-ISRI Edit Operation Report Version " ISRI_VERSION "\n"
-#define DIVIDER  "-------------------------------------------\n"
+#define TITLE    "ocreval Edit Operation Report Version " OCREVAL_VERSION "\n"
+#define DIVIDER  "-----------------------------------------\n"
 
 static char line[100];
 

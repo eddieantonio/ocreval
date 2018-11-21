@@ -24,10 +24,10 @@
 
 #include "sort.h"
 #include "wacrpt.h"
-#include "isri_version.h"
+#include "ocreval_version.h"
 
-#define TITLE    "UNLV-ISRI OCR Word Accuracy Report Version " ISRI_VERSION "\n"
-#define DIVIDER  "----------------------------------------------\n"
+#define TITLE    "ocreval Word Accuracy Report Version " OCREVAL_VERSION "\n"
+#define DIVIDER  "----------------------------------------\n"
 
 #define TOTAL    " Total\n"
 #define OFFSET   29
