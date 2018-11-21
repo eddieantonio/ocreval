@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This file is inspired by [Keep a `CHANGELOG`](http://keepachangelog.com/).
 
+## [7.0.1] - 2018-11-21
+### Fixed
+- Compile error involving inappropriate use of `ssize_t`
+
 ## [7.0.0] - 2018-11-21
 ### Changed
 - Changed name from `isri-ocr-evaluation-tools` to `ocreval` ([#21])
@@ -47,6 +51,7 @@ This file is inspired by [Keep a `CHANGELOG`](http://keepachangelog.com/).
 ### Fixed
 - Compiles on modern OS X and Ubuntu
 
+[7.0.1]: https://github.com/eddieantonio/ocreval/compare/v7.0.0...v7.0.1
 [7.0.0]: https://github.com/eddieantonio/ocreval/compare/v6.1.2...v7.0.0
 [6.1.2]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/compare/v6.1.1...v6.1.2
 [6.1.1]: https://github.com/eddieantonio/isri-ocr-evaluation-tools/compare/v6.1.0...v6.1.1
