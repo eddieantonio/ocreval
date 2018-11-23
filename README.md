@@ -45,10 +45,12 @@ You may need to install `make` and a C compiler:
 
     sudo apt install build-essential
 
-If this package cannot be installed using `apt`, follow
-[Other Linux](#other-linux) below.
+Then install, `libutf8proc-dev`:
 
-    sudo apt-get install libutf8proc-dev
+    sudo apt install libutf8proc-dev
+
+If `libutf8proc-dev` cannot be installed using `apt`, follow
+[Other Linux](#other-linux) below
 
 ### Other Linux
 
@@ -89,8 +91,8 @@ the correct path (replace `~/.bashrc` with your start-up file):
 
 # Porting Credits
 
-Ported by Eddie Antonio Santos, 2015, 2016. See analytical-tools/NOTICE
-for copyright information regarding the original code.
+Ported by Eddie Antonio Santos, 2015, 2016. See `NOTICE` for copyright
+information regarding the original code.
 
 # License
 
