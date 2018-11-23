@@ -25,20 +25,28 @@ Using [Homebrew][brew]:
 Building
 ========
 
-To build the library and all of the programs, simply type `make`.
+To build the library and all of the programs, ensure that you have all
+required [dependencies](#dependencies).
 
 ## Dependencies
 
- - [utf8proc](https://github.com/JuliaLang/utf8proc)
+`ocreval` requires [utf8proc](https://github.com/JuliaLang/utf8proc)
+to build from source.
 
-### OS X
+### macOS
+
+Using [Homebrew][brew]:
 
     brew install utf8proc
 
 ### Ubuntu/Debian
 
-If this package is not in your package repository, follow "Other Linux"
-below.
+You may need to install `make` and a C compiler:
+
+    sudo apt install build-essential
+
+If this package cannot be installed using `apt`, follow
+[Other Linux](#other-linux) below.
 
     sudo apt-get install libutf8proc-dev
 
@@ -58,15 +66,18 @@ Install `libutf8proc-dev` manually:
 
 ## Building the tools
 
+Once all dependencies are installed, you may compile all of the
+utilities using `make`:
+
     make
 
-## Installing globally
+## Installing
 
 Install to `/usr/local/`:
 
     sudo make install
 
-Note: You will not need `sudo` on OS X if you have `brew` installed.
+Note: You will not need `sudo` on macOS if you have `brew` installed.
 
 ## Installing "locally"
 
