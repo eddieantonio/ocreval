@@ -283,7 +283,6 @@ static void append_word(wordlist, start, end)
     Word *word;
     Char *after = end->next;
     size_t len = find_utf8_length(start, after);
-    size_t result;
     char *buffer = malloc(len + 1);
     copy_into_buffer(buffer, start, after);
 
