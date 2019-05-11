@@ -45,8 +45,9 @@
 /* Recursive binary search for the property. */
 static wb_property search_for_property(code_point, left, right)
     Charvalue code_point;
-    size_t left, right;
+    int left, right;
 {
+
     /* Not found, therefore not specified. */
     if (right < left) {
         return Other;
