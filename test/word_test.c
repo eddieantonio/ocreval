@@ -135,6 +135,17 @@ TEST find_words_segments_haida_words() {
     PASS();
 }
 
+/* Regression test -- word boundaries segfaults on control characters.
+ * See: https://github.com/eddieantonio/ocreval/issues/22#issuecomment-491448129 */
+TEST find_words_control_character() {
+    cstring_to_text(text, "\003");
+    find_words(wordlist, text);
+
+    ASSERT_EQ_FMT(0, wordlist->count, "%d");
+
+    PASS();
+}
+
 
 #undef second
 #undef third
@@ -167,4 +178,5 @@ SUITE(find_words_suite) {
     RUN_TEST(find_words_segments_haida_words);
     RUN_TEST(find_words_segments_numerals);
     RUN_TEST(find_words_segments_japanese);
+    RUN_TEST(find_words_control_character);
 }
