@@ -3,16 +3,11 @@ compiler:
 - clang
 - gcc
 
-script:
-- 'make && make test'
-
+dist: xenial
 sudo: required
-# Required to setup libutf8proc on Ubuntu prior to Xenial
+
 install:
-  - curl -OL https://github.com/JuliaStrings/utf8proc/archive/v1.3.1.tar.gz
-  - tar xzf v1.3.1.tar.gz
-  - pushd utf8proc-1.3.1/
-  - make
-  - sudo make install
-  - popd
-  - sudo ldconfig
+- sudo apt install libutf8proc-dev
+script:
+- make
+- make test
