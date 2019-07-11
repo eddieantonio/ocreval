@@ -15,7 +15,7 @@ static Wordlist *wordlist = &wordlist_;
 #define sixth   first->next->next->next->next->next
 #define seventh first->next->next->next->next->next->next
 #define eighth  first->next->next->next->next->next->next->next
-#define nineth  first->next->next->next->next->next->next->next->next
+#define ninth   first->next->next->next->next->next->next->next->next
 
 
 TEST find_words_segments_a_single_ascii_word() {
@@ -65,7 +65,7 @@ TEST find_words_segments_english_with_punctuation() {
     ASSERT_STR_EQ("can’t", wordlist->fifth->string);
     ASSERT_STR_EQ("jump",  wordlist->sixth->string);
     ASSERT_STR_EQ("32.3",  wordlist->seventh->string);
-    ASSERT_STR_EQ("right",  wordlist->nineth->string);
+    ASSERT_STR_EQ("right",  wordlist->ninth->string);
 
     PASS();
 }
@@ -154,7 +154,7 @@ TEST find_words_control_character() {
 #undef sixth
 #undef seventh
 #undef eighth
-#undef nineth
+#undef ninth
 
 static void setup_find_words(void *unused) {
     initialize_texts((Text*[]) {text, NULL});
