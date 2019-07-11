@@ -30,7 +30,7 @@ required [dependencies](#dependencies).
 
 ## Dependencies
 
-`ocreval` requires [utf8proc](https://github.com/JuliaLang/utf8proc)
+`ocreval` requires [utf8proc](https://github.com/JuliaStrings/utf8proc)
 to build from source.
 
 ### macOS
@@ -56,7 +56,7 @@ If `libutf8proc-dev` cannot be installed using `apt`, follow
 
 Install `libutf8proc-dev` manually:
 
-    curl -OL https://github.com/JuliaLang/utf8proc/archive/v1.3.1.tar.gz
+    curl -OL https://github.com/JuliaStrings/utf8proc/archive/v1.3.1.tar.gz
     tar xzf v1.3.1.tar.gz
     cd utf8proc-1.3.1/
     make

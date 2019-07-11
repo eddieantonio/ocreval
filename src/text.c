@@ -295,7 +295,7 @@ static Boolean is_graphic_character(character)
 /**********************************************************************/
 
 /**
- * Is this a combining characer?
+ * Is this a combining character?
  *
  */
 static Boolean is_combining_character(character)
