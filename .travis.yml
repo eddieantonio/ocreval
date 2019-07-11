@@ -3,11 +3,17 @@ compiler:
 - clang
 - gcc
 
+os:
+- linux
+- osx
 dist: xenial
-sudo: required
 
-install:
-- sudo apt install libutf8proc-dev
+addons:
+  apt:
+    packages: libutf8proc-dev
+  homebrew:
+    packages: utf8proc
+
 script:
 - make
 - make test
