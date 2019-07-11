@@ -13,6 +13,7 @@ addons:
     packages: libutf8proc-dev
   homebrew:
     packages: utf8proc
+    update: true
 
 script:
 - make
