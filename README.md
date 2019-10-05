@@ -11,7 +11,11 @@ guide][user-guide] for more information.
 `ocreval` is a modern port of the [ISRI Analytic Tools for OCR Evaluation][isri],
 with UTF-8 support and other improvements.
 
+See [the archived Google Code repository of the original
+project][isri-code]!
+
 [isri]: http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.216.9427&rep=rep1&type=pdf
+[isri-code]: http://code.google.com/p/isri-ocr-evaluation-tools
 
 # Install (macOS)
 
