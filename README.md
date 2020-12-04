@@ -98,6 +98,25 @@ the correct path (replace `~/.bashrc` with your start-up file):
 Ported by Eddie Antonio Santos, 2015, 2016. See `NOTICE` for copyright
 information regarding the original code.
 
+# Citation
+
+```bibtex
+@inproceedings{santos-2019-ocr,
+    title = "{OCR} evaluation tools for the 21st century",
+    author = "Santos, Eddie Antonio",
+    booktitle = "Proceedings of the 3rd Workshop on the Use of Computational Methods in the Study of Endangered Languages Volume 1 (Papers)",
+    month = feb,
+    year = "2019",
+    address = "Honolulu",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/W19-6004",
+    pages = "23--27",
+}
+```
+
+See: <https://www.aclweb.org/anthology/W19-6004/>
+
+
 # License
 
 ### ocreval
