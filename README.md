@@ -121,7 +121,9 @@ See: <https://www.aclweb.org/anthology/W19-6004/>
 
 ### ocreval
 
-Copyright 2015–2018 Eddie Antonio Santos
+Copyright 2015–2017 Eddie Antonio Santos
+
+Copyright © 2018–2021 National Research Council Canada
 
 ### The ISRI Analytic Tools for OCR Evaluation
 
